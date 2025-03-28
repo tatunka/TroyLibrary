@@ -1,4 +1,5 @@
-﻿using TroyLibrary.Data.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using TroyLibrary.Data.Models;
 using TroyLibrary.Repo.Interfaces;
 
 namespace TroyLibrary.Data.Repos
@@ -25,6 +26,16 @@ namespace TroyLibrary.Data.Repos
             return this._context.Books
                 .OrderBy(x => Guid.NewGuid())
                 .Skip(skipper);
+        }
+
+        public IQueryable<Book> GetFeaturedBooks()
+        {
+            return this._context.Books.Where(b => b.InStock);
+        }
+
+        public async Task<Book> GetBook(int bookId)
+        {
+            return await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
         }
     }
 }

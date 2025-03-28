@@ -1,19 +1,59 @@
 <div class="container">
-    <div class="row">
-        <div class="col-8">
+    <div class="row mb-4">
+        <div class="col-4">
             <h1>{{ pageTitle }}</h1>
         </div>
-        <div class="col-4 mb-4">
+        <div class="col-4 text-center">
+            <div class="row">
+                <div class="col-12">
+                    <div class="btn-group d-flex w-100" ngbDropdown role="group" aria-label="Filter boooks">
+                        <div class="btn-group flex-fill" ngbDropdown role="group" aria-label="Filter books by title">
+                            <button type="button" class="btn btn-primary" ngbDropdownToggle [class.active]="this.filterTitle">Filter Title</button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <button *ngFor="let title of this.titles" ngbDropdownItem [class.active]="title.isActive" (click)="this.filterByTitle(title)">{{title.title}}</button>
+                                <button ngbDropdownItem (click)="clearTitleFilter()"><strong>Clear Filter</strong></button>
+                            </div>
+                        </div>
+                        <div class="btn-group flex-fill" ngbDropdown role="group" aria-label="Filter books by author">
+                            <button type="button" class="btn btn-primary" ngbDropdownToggle [class.active]="this.filterAuthor">Filter Author</button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <button *ngFor="let author of this.authors" ngbDropdownItem [class.active]="author.isActive" (click)="this.filterByAuthor(author)">{{author.author}}</button>
+                                <button ngbDropdownItem (click)="clearAuthorFilter()"><strong>Clear Filter</strong></button>
+                            </div>
+                        </div>
+                        <div class="btn-group flex-fill" ngbDropdown role="group" aria-label="Filter books by avilability">
+                            <button type="button" class="btn btn-primary" ngbDropdownToggle [class.active]="this.filterAvailability">Filter Availability</button>
+                            <div class="dropdown-menu" ngbDropdownMenu>
+                                <button *ngFor="let a of this.availability" ngbDropdownItem [class.active]="a.isActive" (click)="this.filterByAvailability(a)">{{a.availability}}</button>
+                                <button ngbDropdownItem (click)="clearAvailibilityFilter()"><strong>Clear Filter</strong></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="btn-group d-flex w-100" role="group" aria-label="Basic example">
+                        <button (click)="this.sortByTitle()" type="button" class="btn btn-secondary flex-fill">Sort Title</button>
+                        <button (click)="this.sortByAuthor()" type="button" class="btn btn-secondary flex-fill">Sort Author</button>
+                        <button (click)="this.sortByAvailability()" type="button" class="btn btn-secondary flex-fill">Sort Availability</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
             <form class="d-flex" role="search">
                 <input [(ngModel)]="searchTitle" name="searchTitle" type="text" class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button (click)="searchBooks()" class="btn btn-outline-success" type="submit">Search</button>
+                <button (click)="searchBooks()" class="btn btn-primary" type="submit">Search</button>
             </form>
         </div>
     </div>
     <div class="row">
-        <div class="col-3 pb-5" *ngFor="let book of books">
+        <div class="col-3 pb-5" *ngFor="let book of displayedBooks">
             <div class="card d-flex flex-column" style="width: 18rem;">
-                <img [src]="book.coverImage" class="card-img-to" style="height:214px;" alt="...">
+                <a routerLink="/bookDetail">
+                    <img [src]="book.coverImage" class="card-img-to" style="height:214px;" alt="Troy Library">
+                </a>
                 <div class="card-body d-flex flex-column flex-grow-1" style="height:184px">
                     <h5 class="card-title">{{ book.title }}</h5>
                     <p class="card-text">{{ book.description }}</p>

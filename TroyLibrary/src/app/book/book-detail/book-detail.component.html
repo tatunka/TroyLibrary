@@ -1,1 +1,11 @@
-<p>book-detail works!</p>
+{{bookDetail?.bookId}}
+{{bookDetail?.title}}
+{{bookDetail?.author}}
+{{bookDetail?.publisher}}
+{{bookDetail?.publicationDate}}
+{{bookDetail?.rating}}
+<img [src]="bookDetail?.coverImage" class="card-img-to" style="height:214px;" alt="...">
+{{bookDetail?.isbn}}
+{{bookDetail?.pageCount}}
+{{bookDetail?.description}}
+{{bookDetail?.isAvailable}}

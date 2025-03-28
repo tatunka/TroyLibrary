@@ -6,5 +6,6 @@ namespace TroyLibrary.Service.Interfaces
     {
         ICollection<BookDTO> SearchBooks(string title);
         ICollection<BookDTO> GetFeaturedBooks(int? count = 10);
+        Task<BookDetailDTO> GetBook(int bookId);
     }
 }

@@ -4,7 +4,8 @@ namespace TroyLibrary.Repo.Interfaces
 {
     public interface IBookRepo
     {
-        public IQueryable<Book> GetBooks();
+        IQueryable<Book> GetBooks();
         IQueryable<Book> GetRandomBooks();
+        Task<Book> GetBook(int bookId);
     }
 }

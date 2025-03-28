@@ -5,6 +5,7 @@ import { BookService } from '../shared/services/book.service';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BookDetailComponent } from './book-detail/book-detail.component';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
 
 
 
@@ -15,7 +16,8 @@ import { BookDetailComponent } from './book-detail/book-detail.component';
   ],
   imports: [
     CommonModule,
-    FormsModule
+    FormsModule,
+    NgbDropdownModule
   ],
   providers: [
     HttpClient,

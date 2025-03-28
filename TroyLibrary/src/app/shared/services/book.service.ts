@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { Injectable } from "@angular/core";
-import { GetBooksResponse } from "../../book/models";
+import { GetBookResponse, GetBooksResponse } from "../../book/models";
 
 const endpoint = environment.apiUrl + 'api/book';
 const httpOptions = {
@@ -16,6 +16,10 @@ const httpOptions = {
 export class BookService {
 
     constructor(private http: HttpClient) {}
+
+    public getBook(bookId: number) {
+        return this.http.get<GetBookResponse>(`${endpoint}/book?bookId=${bookId}`);
+    }
 
     public getFeaturedBooks() {
         return this.http.get<GetBooksResponse>(`${endpoint}/featured`);

@@ -17,6 +17,15 @@ namespace TroyLibrary.API.Controllers
             _bookService = bookService;
         }
 
+        [HttpGet("Book")]
+        public async Task<GetBookResponse> GetBook([FromQuery] int bookId)
+        {
+            return new GetBookResponse
+            {
+                Book = await _bookService.GetBook(bookId),
+            };
+        }
+
         [HttpGet("Featured")]
         public GetBooksResponse GetFeaturedBooks()
         {

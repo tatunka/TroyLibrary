@@ -13,6 +13,33 @@ namespace TroyLibrary.Service
             _bookRepo = bookRepo;
         }
 
+        public async Task<BookDetailDTO> GetBook(int bookId)
+        {
+            var book = await this._bookRepo.GetBook(bookId);
+
+            return new BookDetailDTO
+            {
+                BookId = book.BookId,
+                Title = book.Title,
+                Author = book.Author,
+                Description = book.Description,
+                CoverImage = book.CoverImage,
+                Rating = book.Reviews?.Average(r => r.Rating),
+                IsAvailable = !book.CheckoutDate.HasValue,
+                PublicationDate = book.PublicationDate,
+                ISBN = book.ISBN,
+                PageCount = book.PageCount,
+                Publisher = book.Publisher,
+                Reviews = book.Reviews?.Select(r => new ReviewDTO
+                {
+                    ReviewId = r.ReviewId,
+                    Rating = r.Rating,
+                    Text = r.Text,
+                    Username = r.TroyLibraryUser?.UserName,
+                }).ToList()
+            };
+        }
+
         public ICollection<BookDTO> GetFeaturedBooks(int? count = 10)
         { 
             var books = this._bookRepo.GetRandomBooks();
