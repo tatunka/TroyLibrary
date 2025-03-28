@@ -42,8 +42,8 @@ export class BookComponent implements OnInit {
       (value: GetBooksResponse) => {
         this.books = value.books;
         this.displayedBooks = [...this.books];
-        this.titles = this.books.map(b => {return{title: b.title, isActive: false}}).sort((a, b) => this.helper.compare(a, b));
-        this.authors = this.books.map(b => {return{author:b.author, isActive: false}}).sort((a,b) => this.helper.compare(a, b));
+        this.titles = this.books.map(b => {return{title: b.title, isActive: false}}).sort((a, b) => this.helper.compare(a.title, b.title));
+        this.authors = this.books.map(b => {return{author:b.author, isActive: false}}).sort((a,b) => this.helper.compare(a.author, b.author));
       }
     )
   }
@@ -53,6 +53,12 @@ export class BookComponent implements OnInit {
     this.bookService.searchBooks(this.searchTitle).subscribe(
       (value: GetBooksResponse) => {
         this.books = value.books;
+        this.displayedBooks = [...this.books];
+        this.clearTitleFilter();
+        this.clearAuthorFilter();
+        this.clearAvailibilityFilter();
+        this.titles = this.books.map(b => {return{title: b.title, isActive: false}}).sort((a, b) => this.helper.compare(a.title, b.title));
+        this.authors = this.books.map(b => {return{author:b.author, isActive: false}}).sort((a,b) => this.helper.compare(a.author, b.author));
       }
     )
   }
