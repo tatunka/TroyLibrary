@@ -6,6 +6,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { BookDetailComponent } from './book-detail/book-detail.component';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
+import { AppRoutingModule } from '../app-routing.module';
 
 
 
@@ -15,6 +16,7 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap'
     BookDetailComponent
   ],
   imports: [
+    AppRoutingModule,
     CommonModule,
     FormsModule,
     NgbDropdownModule

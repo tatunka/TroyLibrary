@@ -1,11 +1,73 @@
-{{bookDetail?.bookId}}
-{{bookDetail?.title}}
-{{bookDetail?.author}}
-{{bookDetail?.publisher}}
-{{bookDetail?.publicationDate}}
-{{bookDetail?.rating}}
-<img [src]="bookDetail?.coverImage" class="card-img-to" style="height:214px;" alt="...">
-{{bookDetail?.isbn}}
-{{bookDetail?.pageCount}}
-{{bookDetail?.description}}
-{{bookDetail?.isAvailable}}
+<div class="container">
+    <!--Book Details-->
+    <h1>{{this.bookDetail?.title}}</h1>
+    <div class="row mt-3">
+        <div class="col-6 text-center">
+            <img [src]="this.bookDetail?.coverImage" class="card-img-to"  alt="...">
+        </div>
+        <div class="col-3">
+            <div class="mb-2">
+                <strong><label for="author">Author</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="author" [value]="this.bookDetail?.author">
+            </div>
+            <div class="mb-2">
+                <strong><label for="pageCount">Page Count</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="pageCount" [value]="this.bookDetail?.pageCount">
+            </div>
+            <div class="mb-2">
+                <strong><label for="availability">Availability</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="availability" [value]="this.bookDetail?.isAvailable">
+            </div>
+            <div class="mb-2">
+                <strong><label for="publisher">Publisher</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="publisher" [value]="this.bookDetail?.publisher">
+            </div>
+            <div class="mb-2">
+                <strong><label for="publicationDate">Publication Date</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="publicationDate" [value]="this.bookDetail?.publicationDate">
+            </div>
+            <div class="mb-2">
+                <strong><label for="isbn">ISBN</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="isbn" [value]="this.bookDetail?.isbn">
+            </div>
+            <div class="mb-2">
+                <strong><label for="rating">Rating</label></strong>
+                <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
+            </div>
+        </div>
+        <div class="col-3">
+            <strong><label for="description">Description</label></strong>
+            <textarea #description readonly class="form-control-plaintext" id="description" [ngModel]="this.bookDetail?.description"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="d-grid">
+                <button (click)="this.checkOutBook()" *ngIf="this.bookDetail?.isAvailable" type="button" class="btn btn-primary">Check out '{{this.bookDetail?.title}}'</button>
+                <button *ngIf="!this.bookDetail?.isAvailable" type="button" class="btn btn-danger">'{{this.bookDetail?.title}}' is currently unavailable</button>
+            </div>
+        </div>
+
+        <div class="col-3">
+
+        </div>
+    </div>
+
+    <!--Reviews-->
+    <div class="mt-5">
+        <h1>Reviews</h1>
+        <div *ngIf="this.reviews.length > 0; else noReviews" class="row">
+            <div *ngFor="let review of this.reviews" class="col-3 mb-5">
+                <strong>{{review.userName}}</strong>
+                <textarea readonly class="form-control-plaintext" rows="3" [value]="review.text"></textarea>
+                <input type="text" readonly class="form-control-plaintext" [value]="review.rating">
+            </div>
+        </div>
+        <ng-template #noReviews>
+            <div class="col-12">
+                <p>There are no reviews for this book yet.</p>
+            </div>
+        </ng-template>
+    </div>
+
+</div>

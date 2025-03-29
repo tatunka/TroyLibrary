@@ -28,5 +28,5 @@ export interface GetBooksResponse {
 }
 
 export interface GetBookResponse {
-    bookDetail: BookDetail;
+    book: BookDetail;
 }
