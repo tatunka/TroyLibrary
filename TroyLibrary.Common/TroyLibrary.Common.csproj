@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.14" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\TroyLibrary.Data\TroyLibrary.Data.csproj" />
+  </ItemGroup>
+
 </Project>

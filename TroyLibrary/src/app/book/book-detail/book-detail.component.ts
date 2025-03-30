@@ -23,7 +23,7 @@ export class BookDetailComponent implements OnInit {
     this.bookId = +(this.route.snapshot.paramMap.get('bookId') ?? 0);
     this.bookService.getBook(this.bookId).subscribe(
       (value: GetBookResponse) => {
-        this.bookDetail = value.book;
+        this.bookDetail = value.bookDetail;
         this.reviews = this.bookDetail?.reviews?.length > 0 ? this.bookDetail.reviews : [];
         setTimeout(() => {
           if (this.descriptionTextArea) {

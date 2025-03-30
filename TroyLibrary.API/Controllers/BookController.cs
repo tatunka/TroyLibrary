@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using TroyLibrary.Common.Models;
 using TroyLibrary.Common.Models.Book;
 using TroyLibrary.Service.Interfaces;
 
@@ -22,7 +23,7 @@ namespace TroyLibrary.API.Controllers
         {
             return new GetBookResponse
             {
-                Book = await _bookService.GetBook(bookId),
+                BookDetail = await _bookService.GetBook(bookId),
             };
         }
 
@@ -41,6 +42,33 @@ namespace TroyLibrary.API.Controllers
             return new GetBooksResponse
             {
                 Books = _bookService.SearchBooks(title),
+            };
+        }
+
+        [HttpPost("Create")]
+        public async Task<CrudResponse> CreateBook([FromBody] BookRequest request)
+        {
+            return new CrudResponse
+            {
+                CompletedAt = await _bookService.CreateBookAsync(request.BookData),
+            };
+        }
+
+        [HttpPatch("Update")]
+        public async Task<CrudResponse> UpdateBook([FromBody] BookRequest request)
+        {
+            return new CrudResponse
+            {
+                CompletedAt = await _bookService.UpdateBookAsync(request.BookData),
+            };
+        }
+
+        [HttpDelete("Remove")]
+        public async Task<CrudResponse> RemoveBook([FromQuery] int bookId)
+        {
+            return new CrudResponse
+            {
+                CompletedAt = await _bookService.RemoveBookAsync(bookId),
             };
         }
     }

@@ -12,20 +12,20 @@ namespace TroyLibrary.Data.Models
         public string? TroyLibraryUserId { get; set; }
         [Required]
         [MaxLength(100)]
-        public string Title { get; set; }
+        public required string Title { get; set; }
         [Required]
-        public string Author { get; set; }
+        public required string Author { get; set; }
         [Required]
-        public string Description { get; set; }
+        public required string Description { get; set; }
         [Required]
-        public string CoverImage { get; set; }
+        public required string CoverImage { get; set; }
         [Required]
-        public string Publisher { get; set; }
+        public required string Publisher { get; set; }
         [Required]
         public DateTime PublicationDate { get; set; }
         [StringLength(13)]
         [Required]
-        public string ISBN { get; set; }
+        public required string ISBN { get; set; }
         [Required]
         public int PageCount { get; set; }
         [Required]

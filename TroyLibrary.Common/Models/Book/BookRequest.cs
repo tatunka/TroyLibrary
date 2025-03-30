@@ -2,8 +2,8 @@
 
 namespace TroyLibrary.Common.Models.Book
 {
-    public class GetBookResponse
+    public class BookRequest
     {
-        public BookDetailDTO? BookDetail { get; set; }
+        public required BookDataDTO BookData { get; set; }
     }
 }

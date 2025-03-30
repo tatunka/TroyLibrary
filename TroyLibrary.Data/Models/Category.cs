@@ -9,9 +9,9 @@ namespace TroyLibrary.Data.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int CategoryId { get; set; }
         [Required]
-        public string Name { get; set; }
+        public required string Name { get; set; }
 
         //Navigation properties
-        public virtual ICollection<Book> Books { get; set; }
+        public virtual ICollection<Book>? Books { get; set; }
     }
 }

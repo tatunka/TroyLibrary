@@ -33,9 +33,35 @@ namespace TroyLibrary.Data.Repos
             return this._context.Books.Where(b => b.InStock);
         }
 
-        public async Task<Book> GetBook(int bookId)
+        public async Task<Book?> GetBookAsync(int bookId)
         {
             return await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
+        }
+
+        public async Task<Book?> CreateBookAsync(Book book)
+        {
+            var b = this._context.Books.Add(book);
+            await this._context.SaveChangesAsync();
+            return b.Entity;
+        }
+
+        public async Task<Book?> UpdateBookAsync(Book book)
+        {
+            var b = this._context.Books.Update(book);
+            await this._context.SaveChangesAsync();
+            return b.Entity;
+        }
+
+        public async Task<bool> RemoveBookAsync(int bookId)
+        {
+            var book = await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
+            if (book == null)
+            {
+                return false;
+            }
+            this._context.Books.Remove(book);
+            await this._context.SaveChangesAsync();
+            return true;
         }
     }
 }

@@ -6,6 +6,9 @@ namespace TroyLibrary.Repo.Interfaces
     {
         IQueryable<Book> GetBooks();
         IQueryable<Book> GetRandomBooks();
-        Task<Book> GetBook(int bookId);
+        Task<Book?> GetBookAsync(int bookId);
+        Task<Book?> CreateBookAsync(Book book);
+        Task<Book?> UpdateBookAsync(Book book);
+        Task<bool> RemoveBookAsync(int bookId);
     }
 }
