@@ -1,4 +1,4 @@
-﻿namespace TroyLibrary.Common.Book
+﻿namespace TroyLibrary.Common.Models.Book
 {
     public class GetBooksRequest
     {

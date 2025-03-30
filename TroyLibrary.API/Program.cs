@@ -1,6 +1,9 @@
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 using TroyLibrary.Data;
 using TroyLibrary.Data.Models;
 using TroyLibrary.Data.Repos;
@@ -38,19 +41,43 @@ namespace TroyLibrary.API
                 b => b.MigrationsAssembly("TroyLibrary.Data")));
 
             // Add Identity
-            builder.Services.AddAuthorization();
-            builder.Services.AddIdentityApiEndpoints<TroyLibraryUser>()
-                .AddRoles<IdentityRole>()
-                .AddEntityFrameworkStores<TroyLibraryContext>();
-
-            builder.Services.AddIdentityCore<TroyLibraryUser>(o =>
+            builder.Services.AddIdentity<TroyLibraryUser, IdentityRole>(o =>
             {
                 o.Password.RequireDigit = false;
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequireNonAlphanumeric = false;
                 o.Password.RequiredLength = 6;
-            });
+            })
+                //.AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<TroyLibraryContext>()
+                .AddDefaultTokenProviders();
+
+            // JWT Authentication
+            var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:SecretKey"]);
+            builder.Services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(options =>
+                {
+                    options.RequireHttpsMetadata = false;
+                    options.SaveToken = true;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidIssuer = builder.Configuration["Jwt:Issuer"],
+                        ValidAudience = builder.Configuration["Jwt:Audience"],
+                        ValidateLifetime = true,
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
+            builder.Services.AddAuthorization();
 
             // Add Services
             builder.Services.AddScoped<IBookService, BookService>();
@@ -77,8 +104,8 @@ namespace TroyLibrary.API
 
             app.UseHttpsRedirection();
 
+            app.UseAuthentication();
             app.UseAuthorization();
-
 
             app.MapControllers();
 

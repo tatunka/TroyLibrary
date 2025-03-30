@@ -1,11 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using TroyLibrary.Common.Book;
+using TroyLibrary.Common.Models.Book;
 using TroyLibrary.Service.Interfaces;
 
 namespace TroyLibrary.API.Controllers
 {
-    [AllowAnonymous]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BookController : ControllerBase

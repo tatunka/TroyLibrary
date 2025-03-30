@@ -1,6 +1,6 @@
 ﻿using TroyLibrary.Common.DTOs;
 
-namespace TroyLibrary.Common.Book
+namespace TroyLibrary.Common.Models.Book
 {
     public class GetBookResponse
     {

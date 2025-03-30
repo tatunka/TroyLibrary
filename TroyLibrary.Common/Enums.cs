@@ -1,11 +1,15 @@
-﻿namespace TroyLibrary.Common
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TroyLibrary.Common
 {
     public class Enums
     {
 
-        public enum RoleType
+        public enum Role
         {
-            Librarian,
+            [Display(Name = "Librarian")]
+            Librarian = 1,
+            [Display(Name = "Customer")]
             Customer
         }
     }

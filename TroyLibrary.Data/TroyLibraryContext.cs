@@ -1,18 +1,22 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using TroyLibrary.Data.Models;
 
 namespace TroyLibrary.Data
 {
     public class TroyLibraryContext : IdentityDbContext<TroyLibraryUser>
     {
-        public TroyLibraryContext(DbContextOptions<TroyLibraryContext> options)
+        private readonly IConfiguration _configuration;
+
+        public TroyLibraryContext(DbContextOptions<TroyLibraryContext> options, IConfiguration configuration)
             : base(options)
         {
+            this._configuration = configuration;
         }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder options)
-            => options.UseSqlServer("Server=localhost;Database=TroyLibrary;Trusted_Connection=True;TrustServerCertificate=True");
+        protected override void OnConfiguring(DbContextOptionsBuilder options) =>
+           options.UseSqlServer(this._configuration["ConnectionStrings:TroyLibraryContext"]);
 
         public DbSet<TroyLibraryUser> TroyLibraryUsers { get; set; }
         public DbSet<Book> Books { get; set; }
@@ -35,7 +39,7 @@ namespace TroyLibrary.Data
                 .ToTable("Review")
                 .HasOne(r => r.TroyLibraryUser)
                 .WithMany(u => u.Reviews)
-                .OnDelete(DeleteBehavior.ClientSetNull);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }
