@@ -35,7 +35,10 @@ namespace TroyLibrary.Data.Repos
 
         public async Task<Book?> GetBookAsync(int bookId)
         {
-            return await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
+            return await this._context.Books
+                .Include(b => b.Category)
+                .Include(b => b.Reviews)
+                .FirstOrDefaultAsync(b => b.BookId == bookId);
         }
 
         public async Task<Book?> CreateBookAsync(Book book)

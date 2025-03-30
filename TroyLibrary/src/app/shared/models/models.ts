@@ -10,3 +10,11 @@ export enum Category {
     History,
     SelfHelp
 }
+
+export enum Lookups {
+    Category = 'Category'
+}
+
+export interface crudResponse {
+    completedAt: Date
+}

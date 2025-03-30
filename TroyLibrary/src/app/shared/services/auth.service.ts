@@ -11,7 +11,7 @@ const endpoint = environment.apiUrl + 'api/auth';
 })
 export class AuthService {
 
-  constructor( private http: HttpClient) {}
+  constructor(private http: HttpClient) {}
 
   private authStatus = new BehaviorSubject<boolean>(this.isAuthenticated());
 

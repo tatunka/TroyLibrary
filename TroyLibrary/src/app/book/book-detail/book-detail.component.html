@@ -6,36 +6,45 @@
             <img [src]="this.bookDetail?.coverImage" class="card-img-to"  alt="...">
         </div>
         <div class="col-3">
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="author">Author</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="author" [value]="this.bookDetail?.author">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="pageCount">Page Count</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="pageCount" [value]="this.bookDetail?.pageCount">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="availability">Availability</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="availability" [value]="this.bookDetail?.isAvailable">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="publisher">Publisher</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="publisher" [value]="this.bookDetail?.publisher">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="publicationDate">Publication Date</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="publicationDate" [value]="this.bookDetail?.publicationDate">
             </div>
-            <div class="mb-2">
+            <div class="mb-3">
                 <strong><label for="isbn">ISBN</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="isbn" [value]="this.bookDetail?.isbn">
             </div>
-            <div class="mb-2">
+        </div>
+        <div class="col-3">
+            <div class="mb-3">
+                <strong><label for="category" class="form-label">Category</label></strong>
+                <input readonly class="form-control-plaintext" list="categoryOptions" id="category" [value]="this.bookDetail?.categoryName">
+                <datalist id="categoryOptions">
+                    @for (category of categories; track category.value) {
+                        <option [value]="category.value">
+                    }
+                </datalist>
+            </div>
+            <div class="mb-3">
                 <strong><label for="rating">Rating</label></strong>
                 <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
             </div>
-        </div>
-        <div class="col-3">
             <strong><label for="description">Description</label></strong>
             <textarea #description readonly class="form-control-plaintext" id="description" [ngModel]="this.bookDetail?.description"></textarea>
         </div>

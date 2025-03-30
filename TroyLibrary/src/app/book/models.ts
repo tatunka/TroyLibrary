@@ -7,7 +7,7 @@ export interface BookDetail extends Book {
     pageCount: number;
     reviews: Review[];
     category: Category;
-    CategoryName: string;
+    categoryName: string;
     CheckoutDate: Date;
 }
 
@@ -41,13 +41,13 @@ export interface Book {
 }
 
 export interface GetBooksResponse {
-    books: [];
+    books: Book[];
 }
 
 export interface GetBookResponse {
     bookDetail: BookDetail;
 }
 
-export interface CreateBookRequest {
-
+export interface BookRequest {
+    bookData: BookData
 }

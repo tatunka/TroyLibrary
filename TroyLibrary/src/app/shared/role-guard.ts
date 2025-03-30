@@ -14,7 +14,7 @@ export class RoleGuard implements CanActivate {
     canActivate(route: ActivatedRouteSnapshot): boolean {
         const userRoles = this.auth.getUserRoles();
         const allowedRoles: string[] = route.data['roles'];
-        if (allowedRoles?.length === 0 || allowedRoles?.some(role => userRoles.includes(role))) {
+        if (allowedRoles === undefined || allowedRoles?.length === 0 || allowedRoles?.some(role => userRoles.includes(role))) {
             return true;
         }
         this.modalService.open(LoginModalComponent, {centered: true });

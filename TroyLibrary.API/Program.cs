@@ -7,6 +7,7 @@ using System.Text;
 using TroyLibrary.Data;
 using TroyLibrary.Data.Models;
 using TroyLibrary.Data.Repos;
+using TroyLibrary.Data.Repos.Interfaces;
 using TroyLibrary.Repo.Interfaces;
 using TroyLibrary.Service;
 using TroyLibrary.Service.Interfaces;
@@ -81,7 +82,9 @@ namespace TroyLibrary.API
 
             // Add Services
             builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<ILookupService, LookupService>();
             builder.Services.AddScoped<IBookRepo, BookRepo>();
+            builder.Services.AddScoped<ILookupRepo, LookupRepo>();
 
             var app = builder.Build();
 
