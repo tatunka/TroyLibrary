@@ -71,7 +71,10 @@ export class LoginModalComponent {
             this.toastService.showError('Incorrect User Name / Password');
           }
         }, 
-        error: (error) => this.toastService.showError(error.message)
+        error: (error) => {
+          this.toastService.showError('Unable to log in');
+          console.log(error.message);
+        }
       });
     }
     else if (this.activeTab === Tab.Register) {
@@ -86,7 +89,10 @@ export class LoginModalComponent {
           this.activeModal.close();
           this.router.navigate(['/book']);
         },
-        error: (error) => this.toastService.showError(error.message)
+        error: (error) => {
+          this.toastService.showError('Unable to regiser new user');
+          console.log(error.message);
+        }
       });
     }
   }

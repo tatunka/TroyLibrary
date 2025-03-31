@@ -1,82 +1,120 @@
 <div class="container">
     <!--Book Details-->
-    <h1>{{this.bookDetail?.title}}</h1>
-    <div class="row mt-3">
-        <div class="col-6 text-center">
-            <img [src]="this.bookDetail?.coverImage" class="card-img-to"  alt="...">
-        </div>
-        <div class="col-3">
-            <div class="mb-3">
-                <strong><label for="author">Author</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="author" [value]="this.bookDetail?.author">
+    <span class="h1 pull-left">{{this.bookDetail?.title}}</span>
+    @if (this.bookDetail?.CheckoutDate) {
+        <span class="h4"> - (Checked out {{this.bookDetail?.CheckoutDate}})</span>
+    }
+    <form [formGroup]="this.form">
+        <div class="row mt-3"> 
+            <div class="col-6 text-center">
+                <img [src]="this.bookDetail?.coverImage" class="card-img-to"  alt="...">
             </div>
-            <div class="mb-3">
-                <strong><label for="pageCount">Page Count</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="pageCount" [value]="this.bookDetail?.pageCount">
-            </div>
-            <div class="mb-3">
-                <strong><label for="availability">Availability</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="availability" [value]="this.bookDetail?.isAvailable">
-            </div>
-            <div class="mb-3">
-                <strong><label for="publisher">Publisher</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="publisher" [value]="this.bookDetail?.publisher">
-            </div>
-            <div class="mb-3">
-                <strong><label for="publicationDate">Publication Date</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="publicationDate" [value]="this.bookDetail?.publicationDate">
-            </div>
-            <div class="mb-3">
-                <strong><label for="isbn">ISBN</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="isbn" [value]="this.bookDetail?.isbn">
-            </div>
-        </div>
-        <div class="col-3">
-            <div class="mb-3">
-                <strong><label for="category" class="form-label">Category</label></strong>
-                <input readonly class="form-control-plaintext" list="categoryOptions" id="category" [value]="this.bookDetail?.categoryName">
-                <datalist id="categoryOptions">
-                    @for (category of categories; track category) {
-                        <option [value]="category.value">
+            <div class="col-3">
+                <div class="mb-3">
+                    <strong><label for="author">Author</label></strong>
+                    <input type="text" formControlName="author" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="author">
+                </div>
+                <div class="mb-3">
+                    <strong><label for="pageCount">Page Count</label></strong>
+                    <input type="number" formControlName="pageCount" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="pageCount">
+                </div>
+                <div class="mb-3">
+                    <strong><label for="availability">Availability</label></strong>
+                    <input type="text" readonly class="form-control-plaintext" id="availability" [value]="this.bookDetail?.isAvailable">
+                </div>
+                <div class="mb-3">
+                    <strong><label for="publisher">Publisher</label></strong>
+                    <input type="text" formControlName="publisher" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="publisher">
+                </div>
+                <div class="mb-3">
+                    @if (this.isLibrarian) {
+                        <strong><label for="publicationDate">Publication Date - {{this.pubDate | date: 'M/d/yyyy'}}</label></strong>
+                        <input type="date" formControlName="publicationDate" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="publicationDate">
                     }
-                </datalist>
+                    @else {
+                        <strong><label for="publicationDate">Publication Date</label></strong>
+                        <input type="text" readonly name="publicationDate" class="form-control-plaintext" id="publicationDate" [value]="this.pubDate">
+                    }
+                </div>
+                <div class="mb-3">
+                    <strong><label for="isbn">ISBN</label></strong>
+                    <input type="text" formControlName="isbn" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="isbn">
+                </div>
             </div>
-            <div class="mb-3">
-                <strong><label for="rating">Rating</label></strong>
-                <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
+            <div class="col-3">
+                <div class="mb-3">
+                    <label for="category" class="form-label"><strong>Category</strong></label>
+                    @if(this.isLibrarian) {
+                        <select class="form-select" id="categoryOptions" formControlName="category" type="number">
+                            @for (category of categories; track category) {
+                                <option [value]="category.id">{{category.value}}</option>
+                            }
+                        </select>
+                    }
+                    @else {
+                        <input type="text" readonly class="form-control-plaintext" id="publisher" [value]="this.bookDetail?.categoryName">
+                    }
+                </div>
+                <div class="mb-3">
+                    <strong><label for="rating">Rating</label></strong>
+                    <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
+                </div>
+                <div class="mb-3">
+                    <strong><label for="description">Description</label></strong>
+                    <textarea #description formControlName="description" [readonly]="!this.isLibrarian" [class]="this.formControlClass" id="description"></textarea>
+                </div>
+                @if (this.isLibrarian) {
+                    <div class="mb-3">
+                        <strong><label for="description">Cover Image</label></strong>
+                        <textarea formControlName="coverImage" row="5" class="form-control" id="coverImage"></textarea>
+                    </div>
+                }
             </div>
-            <strong><label for="description">Description</label></strong>
-            <textarea #description readonly class="form-control-plaintext" id="description" [ngModel]="this.bookDetail?.description"></textarea>
         </div>
-    </div>
+    </form>
     <div class="row">
         <div class="col-12">
             <div class="d-grid">
-                <button (click)="this.checkOutBook()" *ngIf="this.bookDetail?.isAvailable" type="button" class="btn btn-primary">Check out '{{this.bookDetail?.title}}'</button>
-                <button *ngIf="!this.bookDetail?.isAvailable" type="button" class="btn btn-danger">'{{this.bookDetail?.title}}' is currently unavailable</button>
+                @if (this.isLibrarian) {
+                    <button (click)="this.removeBook()" type="button" class="btn btn-danger">Remove '{{this.bookDetail?.title}}' from inventory?</button>
+                    @if (this.form.dirty) {
+                        <button (click)="this.updateBook()" type="button" class="btn btn-warning">Save changes to '{{this.bookDetail?.title}}'?</button>
+                    }
+                    @if (!this.bookDetail?.isAvailable) {
+                        <button (click)="this.returnBook()" type="button" class="btn btn-primary">Return '{{this.bookDetail?.title}} ({{this.bookDetail?.CheckoutDate | date: 'd/M/yyyy'}})'</button>
+                    }
+                }
+                @else {
+                    @if (this.bookDetail?.isAvailable){
+                        <button (click)="this.checkOutBook()" type="button" class="btn btn-primary">Check out '{{this.bookDetail?.title}}'</button>
+                    }
+                    @else {
+                        <button class="btn btn-danger" disabled>'{{this.bookDetail?.title}}' is currently unavailable</button>
+                    }
+                    <button (click)="this.reviewBook()" type="button" class="btn btn-info">Review '{{this.bookDetail?.title}}'</button>
+                }
             </div>
-        </div>
-
-        <div class="col-3">
-
         </div>
     </div>
 
     <!--Reviews-->
     <div class="mt-5">
         <h1>Reviews</h1>
-        <div *ngIf="this.reviews.length > 0; else noReviews" class="row">
-            <div *ngFor="let review of this.reviews" class="col-3 mb-5">
-                <strong>{{review.userName}}</strong>
-                <textarea readonly class="form-control-plaintext" rows="3" [value]="review.text"></textarea>
-                <input type="text" readonly class="form-control-plaintext" [value]="review.rating">
+        @if (this.reviews.length > 0) {
+            <div class="row">
+                @for (review of this.reviews; track review){
+                    <div class="col-3 mb-5">
+                        <strong>{{review.userName}}</strong>
+                        <textarea readonly class="form-control-plaintext" rows="3" [value]="review.text"></textarea>
+                        <input type="text" readonly class="form-control-plaintext" [value]="review.rating">
+                    </div>
+                }
             </div>
-        </div>
-        <ng-template #noReviews>
+        }
+        @else {
             <div class="col-12">
                 <p>There are no reviews for this book yet.</p>
             </div>
-        </ng-template>
+        }
     </div>
-
 </div>

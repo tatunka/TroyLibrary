@@ -142,18 +142,27 @@ namespace TroyLibrary.Service
 
         public async Task<DateTime?> UpdateBookAsync(BookDataDTO book)
         {
-            var b = new Book
+            if (!book.BookId.HasValue)
             {
-                Title = book.Title,
-                Author = book.Author,
-                Description = book.Description,
-                CoverImage = book.CoverImage,
-                PublicationDate = book.PublicationDate,
-                ISBN = book.ISBN,
-                PageCount = book.PageCount,
-                Publisher = book.Publisher,
-                CategoryId = (int)book.Category
-            };
+                return null;
+            }
+
+            var b = await this._bookRepo.GetBookAsync(book.BookId.Value);
+            if (b == null)
+            {
+                return null;
+            }
+
+            b.Title = book.Title;
+            b.Author = book.Author;
+            b.Description = book.Description;
+            b.CoverImage = book.CoverImage;
+            b.PublicationDate = book.PublicationDate;
+            b.ISBN = book.ISBN;
+            b.PageCount = book.PageCount;
+            b.Publisher = book.Publisher;
+            b.CategoryId = (int)book.Category;
+
             var newBook = await this._bookRepo.UpdateBookAsync(b);
 
             if (newBook != null)

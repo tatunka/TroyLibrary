@@ -12,6 +12,7 @@ export interface BookDetail extends Book {
 }
 
 export interface BookData {
+    bookId?: number;
     title: string;
     author: string;
     description: string;

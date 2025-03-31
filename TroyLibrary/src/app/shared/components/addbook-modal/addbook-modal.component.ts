@@ -50,7 +50,7 @@ export class AddbookModalComponent implements OnInit {
   }
 
   addBook() {
-    var request: BookRequest = {
+    const request: BookRequest = {
       bookData: this.form.value as BookData,
     }
     request.bookData.category = Number(request.bookData.category);
@@ -60,7 +60,10 @@ export class AddbookModalComponent implements OnInit {
         this.activeModal.close();
         this.router.navigate(['/detail', response.bookDetail.bookId]);
       },
-      error: (error) => this.toastService.showError(error.message)
+      error: (error) => {
+        this.toastService.showError('Unable to add book to library');
+        console.log(error.message);
+      }
     })
   }
 }
