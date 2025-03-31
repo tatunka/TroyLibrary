@@ -10,5 +10,7 @@ namespace TroyLibrary.Service.Interfaces
         Task<BookDetailDTO?> CreateBookAsync(BookDataDTO book);
         Task<DateTime?> UpdateBookAsync(BookDataDTO book);
         Task<DateTime?> RemoveBookAsync(int bookId);
+        Task<bool> CheckoutBookAsync(int bookId, string? userId);
+        Task<bool> ReturnBookAsync(int bookId);
     }
 }

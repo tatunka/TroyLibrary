@@ -3,7 +3,7 @@ import { environment } from "../../../environments/environment";
 import { Injectable } from "@angular/core";
 import { BookRequest, GetBookResponse, GetBooksResponse } from "../../book/models";
 import { Observable } from "rxjs";
-import { CrudResponse } from "../models/models";
+import { BooleanResponse, CrudResponse } from "../models/models";
 
 const endpoint = environment.apiUrl + 'api/book';
 
@@ -31,10 +31,18 @@ export class BookService {
     }
 
     public updateBook(request: BookRequest): Observable<CrudResponse> {
-        return this.http.patch<CrudResponse>(`${endpoint}`, request);
+        return this.http.patch<CrudResponse>(`${endpoint}/update`, request);
     }
 
     public removeBook(bookId: number): Observable<CrudResponse> {
         return this.http.delete<CrudResponse>(`${endpoint}?bookid=${bookId}`);
+    }
+
+    public checkoutBook(bookId: number): Observable<BooleanResponse> {
+        return this.http.patch<BooleanResponse>(`${endpoint}/checkout?bookid=${bookId}`, null);
+    }
+
+    public returnBook(bookId: number): Observable<BooleanResponse> {
+        return this.http.patch<BooleanResponse>(`${endpoint}/return?bookid=${bookId}`, null);
     }
 }

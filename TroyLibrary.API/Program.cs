@@ -42,15 +42,15 @@ namespace TroyLibrary.API
                 b => b.MigrationsAssembly("TroyLibrary.Data")));
 
             // Add Identity
+            var requirements = builder.Configuration.GetSection("PasswordRequirements"); 
             builder.Services.AddIdentity<TroyLibraryUser, IdentityRole>(o =>
             {
-                o.Password.RequireDigit = false;
-                o.Password.RequireLowercase = false;
-                o.Password.RequireUppercase = false;
-                o.Password.RequireNonAlphanumeric = false;
-                o.Password.RequiredLength = 6;
+                o.Password.RequireDigit = requirements.GetValue<bool>("RequireDigit");
+                o.Password.RequireLowercase = requirements.GetValue<bool>("RequireLowercase");
+                o.Password.RequireUppercase = requirements.GetValue<bool>("RequireUppercase");
+                o.Password.RequireNonAlphanumeric = requirements.GetValue<bool>("RequireNonAlphaNumeric");
+                o.Password.RequiredLength = requirements.GetValue<int>("RequiredLength");
             })
-                //.AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<TroyLibraryContext>()
                 .AddDefaultTokenProviders();
 

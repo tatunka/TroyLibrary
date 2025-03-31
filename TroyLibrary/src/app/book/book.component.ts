@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { BookService } from '../shared/services/book.service';
 import { Book, GetBooksResponse } from './models';
 import { Helper } from '../shared/helper';
+import { Role } from '../shared/models/auth-models';
+import { AuthService } from '../shared/services/auth.service';
+import { ToastService } from '../shared/components/toast/toast-service';
+import { BooleanResponse } from '../shared/models/models';
 
 @Component({
   selector: 'app-book',
@@ -11,10 +15,16 @@ import { Helper } from '../shared/helper';
 })
 export class BookComponent implements OnInit {
 
-  constructor(private bookService: BookService, private helper: Helper){}
+  constructor(
+    private bookService: BookService, 
+    private auth: AuthService,
+    private toast: ToastService,
+    private helper: Helper
+  ){}
 
   pageTitle: string = "Featured Books";
   searchTitle: string = '';
+  isLibrarian!: boolean;
   books: Book[] = [];
   filteredBooks: Book[] = [];
   displayedBooks: Book[] = [];
@@ -37,7 +47,9 @@ export class BookComponent implements OnInit {
   filterAuthorTerms: string[] = [];
   filterAvailabilityTerms: string[] = [];
 
+
   ngOnInit(): void {
+    this.isLibrarian = this.auth.isInRole(Role.Librarian);
     this.bookService.getFeaturedBooks().subscribe(
       (value: GetBooksResponse) => {
         this.books = value.books;
@@ -159,9 +171,48 @@ export class BookComponent implements OnInit {
     this.filter();
   }
 
+  checkOutBook(event: MouseEvent, book: Book) {
+    event.preventDefault();
+    this.bookService.checkoutBook(book.bookId).subscribe({
+      next: (response: BooleanResponse) => {
+        if (response.success) {
+          this.toast.showSuccess('Successfully check out book!');
+          book.isAvailable = false;
+        }
+        else {
+          this.toast.showError('Unable to check out book');
+        }
+      },
+      error: (error) => {
+        this.toast.showError('Unable to check out book');
+        console.log(error.message);
+      }
+    });
+  }
+
+  returnBook(event: MouseEvent, book: Book) {
+    event.preventDefault();
+    this.bookService.returnBook(book.bookId).subscribe({
+      next: (response: BooleanResponse) => {
+        if (response.success) {
+          this.toast.showSuccess('Book successfully returned!');
+          book.isAvailable = true;
+          book.isOverdue = false;
+        }
+        else {
+          this.toast.showError('Unable to return book');
+        }
+      },
+      error: (error) => {
+        this.toast.showError('Unable to return book');
+        console.log(error.message);
+      }
+    });
+  }  
+
   numSequence(n?: number): Array<number> {
     if (n) {
-      return Array(n);
+      return Array(Math.floor(n));
     }
     return [];
   }

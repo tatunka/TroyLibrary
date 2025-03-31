@@ -4,7 +4,7 @@ import { BookData, BookDetail, BookRequest, GetBookResponse } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../shared/services/lookup.service';
 import { LookupItem, LookupResponse } from '../../shared/models/lookup-models';
-import { CrudResponse, GetReviewsResponse, Lookups, Review } from '../../shared/models/models';
+import { BooleanResponse, CrudResponse, GetReviewsResponse, Lookups, Review } from '../../shared/models/models';
 import { AuthService } from '../../shared/services/auth.service';
 import { Role } from '../../shared/models/auth-models';
 import { ToastService } from '../../shared/components/toast/toast-service';
@@ -51,7 +51,7 @@ export class BookDetailComponent implements OnInit {
   });
 
   bookId!: number;
-  bookDetail?: BookDetail;
+  bookDetail!: BookDetail;
   reviews: Review[] = [];
   categories: LookupItem[] = [];
   isLibrarian!: boolean;
@@ -111,7 +111,8 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  updateBook() {
+  updateBook(event: MouseEvent) {
+    event.preventDefault();
     const request: BookRequest = {
       bookData: this.form.value as BookData,
     }
@@ -136,7 +137,7 @@ export class BookDetailComponent implements OnInit {
   }
 
   refreshReviews(bookId: number) {
- //get reviews
+  //get reviews
     this.reviewService.GetReviews(bookId).subscribe({
       next: (response: GetReviewsResponse) => this.reviews = response.reviews,
       error: (error) => {
@@ -146,15 +147,48 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  checkOutBook() {
-
+  checkOutBook(event: MouseEvent) {
+    event.preventDefault();
+    this.bookService.checkoutBook(this.bookId).subscribe({
+      next: (response: BooleanResponse) => {
+        if (response.success) {
+          this.toast.showSuccess('Successfully check out book!');
+          (this.bookDetail as BookDetail).isAvailable = false;
+        }
+        else {
+          this.toast.showError('Unable to check out book');
+        }
+      },
+      error: (error) => {
+        this.toast.showError('Unable to check out book');
+        console.log(error.message);
+      }
+    });
   }
 
-  returnBook() {
-    
+  returnBook(event: MouseEvent) {
+    event.preventDefault();
+    this.bookService.returnBook(this.bookId).subscribe({
+      next: (response: BooleanResponse) => {
+        if (response.success) {
+          this.toast.showSuccess('Book successfully returned!');
+          this.bookDetail.isAvailable = true;
+          this.bookDetail.isOverdue = false;
+          this.bookDetail.checkoutDate = undefined;
+        }
+        else {
+          this.toast.showError('Unable to return book');
+        }
+      },
+      error: (error) => {
+        this.toast.showError('Unable to return book');
+        console.log(error.message);
+      }
+    });
   }
 
-  removeBook() {
+  removeBook(event: MouseEvent) {
+    event.preventDefault();
     this.bookService.removeBook(this.bookId).subscribe({
       next: (response: CrudResponse) => {
         if (response.completedAt) {
@@ -169,7 +203,8 @@ export class BookDetailComponent implements OnInit {
     });
   }
 
-  reviewBook() {
+  reviewBook(event: MouseEvent) {
+    event.preventDefault();
     const modalRef: NgbModalRef = this.modalService.open(ReviewModalComponent, {});
     modalRef.componentInstance.bookId = this.bookId;
     modalRef.componentInstance.callback = () => {
@@ -178,7 +213,10 @@ export class BookDetailComponent implements OnInit {
     };
   }
 
-  numSequence(n: number): Array<number> {
-    return Array(n);
+  numSequence(n?: number): Array<number> {
+    if (n) {
+      return Array(Math.floor(n));
+    }
+    return [];
   }
 }

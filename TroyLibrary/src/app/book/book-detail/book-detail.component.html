@@ -1,13 +1,17 @@
 <div class="container">
     <!--Book Details-->
     <span class="h1 pull-left">{{this.bookDetail?.title}}</span>
-    @if (this.bookDetail?.CheckoutDate) {
-        <span class="h4"> - (Checked out {{this.bookDetail?.CheckoutDate}})</span>
+    @if (this.isLibrarian && this.bookDetail?.checkoutDate) {
+        <span class="h4"> - (checked out on {{this.bookDetail?.checkoutDate | date: 'M/d/yyyy'}})
+            @if (this.bookDetail?.isOverdue) {
+                <span class="text-danger ps-2">Overdue</span>
+            }
+        </span>
     }
     <form [formGroup]="this.form">
         <div class="row mt-3"> 
             <div class="col-6 text-center">
-                <img [src]="this.bookDetail?.coverImage" class="card-img-to" style="width:640px;"  alt="...">
+                <img [src]="this.bookDetail?.coverImage" class="card-img-to" style="width:640px;height:480px"  alt="...">
             </div>
             <div class="col-3">
                 <div class="mb-3">
@@ -56,8 +60,20 @@
                     }
                 </div>
                 <div class="mb-3">
-                    <strong><label for="rating">Rating</label></strong>
-                    <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
+                    <div class="row">
+                        <div class="col-auto">
+                            <strong><label for="rating">Rating</label></strong>
+                            <span class="ps-3">
+                                <span *ngFor="let n of this.numSequence(this.bookDetail?.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
+                                    @if ((this.bookDetail?.rating ?? 0) % 1 !== 0) {
+                                        <i class="bi bi-star-half"></i>
+                                    }
+                            </span>
+                        </div>
+                        <div class="col-auto">
+                            <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
+                        </div>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <strong><label for="description">Description</label></strong>
@@ -76,22 +92,22 @@
         <div class="col-12">
             <div class="d-grid">
                 @if (this.isLibrarian) {
-                    <button (click)="this.removeBook()" type="button" class="btn btn-danger">Remove '{{this.bookDetail?.title}}' from inventory?</button>
+                    <button (click)="this.removeBook($event)" type="button" class="btn btn-danger">Remove '{{this.bookDetail?.title}}' from inventory?</button>
                     @if (this.form.dirty) {
-                        <button (click)="this.updateBook()" type="button" class="btn btn-warning">Save changes to '{{this.bookDetail?.title}}'?</button>
+                        <button (click)="this.updateBook($event)" type="button" class="btn btn-warning">Save changes to '{{this.bookDetail?.title}}'?</button>
                     }
                     @if (!this.bookDetail?.isAvailable) {
-                        <button (click)="this.returnBook()" type="button" class="btn btn-primary">Return '{{this.bookDetail?.title}} ({{this.bookDetail?.CheckoutDate | date: 'd/M/yyyy'}})'</button>
+                        <button (click)="this.returnBook($event)" type="button" class="btn btn-primary">Return '{{this.bookDetail?.title}}'</button>
                     }
                 }
                 @else {
                     @if (this.bookDetail?.isAvailable){
-                        <button (click)="this.checkOutBook()" type="button" class="btn btn-primary">Check out '{{this.bookDetail?.title}}'</button>
+                        <button (click)="this.checkOutBook($event)" type="button" class="btn btn-primary">Check out '{{this.bookDetail?.title}}'</button>
                     }
                     @else {
                         <button class="btn btn-danger" disabled>'{{this.bookDetail?.title}}' is currently unavailable</button>
                     }
-                    <button (click)="this.reviewBook()" type="button" class="btn btn-info">Review '{{this.bookDetail?.title}}'</button>
+                    <button (click)="this.reviewBook($event)" type="button" class="btn btn-info">Review '{{this.bookDetail?.title}}'</button>
                 }
             </div>
         </div>

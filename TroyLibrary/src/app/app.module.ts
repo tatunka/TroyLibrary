@@ -13,6 +13,7 @@ import { JwtModule } from '@auth0/angular-jwt';
 import { authInterceptor } from './shared/interceptors/auth-interceptor';
 import { AddbookModalComponent } from './shared/components/addbook-modal/addbook-modal.component';
 import { ReviewModalComponent } from './shared/components/review-modal/review-modal.component';
+import { environment } from '../environments/environment';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -37,8 +38,8 @@ export function tokenGetter() {
     JwtModule.forRoot({
       config: {
         tokenGetter: tokenGetter,
-        allowedDomains: ['localhost:7135'],
-        disallowedRoutes: ['https://localhost:7135/api/auth/login']
+        allowedDomains: [environment.JwtIssuer],
+        disallowedRoutes: [`https://${environment.JwtIssuer}/api/auth/login`]
       }
     })
   ],

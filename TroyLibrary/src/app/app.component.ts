@@ -28,7 +28,7 @@ export class AppComponent {
   logout(event: MouseEvent) {
     event?.preventDefault()
     this.auth.logout();
-    this.router.navigate(['/']);
+    window.location.reload();
   }
 
   addBook(event: MouseEvent) {

@@ -7,7 +7,7 @@ export interface BookDetail extends Book {
     pageCount: number;
     category: Category;
     categoryName: string;
-    CheckoutDate: Date;
+    checkoutDate?: Date;
 }
 
 export interface BookData {

@@ -9,8 +9,8 @@
     </ul>
     <button type="button" class="btn-close" aria-label="Close" (click)="this.close()"></button>
 </div>
-<div class="modal-body">
-    <form [formGroup]="this.form">
+<form id="form" [formGroup]="this.form" (ngSubmit)="this.submit()">
+    <div class="modal-body">
         <div class="mb-3">
             <label for="username">User Name</label>
             <input id="username" class="form-control mb-3" type="text" name="username" formControlName="username"/>
@@ -23,8 +23,8 @@
                 <label class="btn btn-outline-primary" for="librarianRadio">Librarian</label>
             </div>
         </div>
-    </form>
-</div>
-<div class="modal-footer">
-    <button type="button" class="btn btn-primary" [disabled]="!this.form.valid" (click)="this.submit()">{{this.activeTab === this.tab.Login ? 'Log In' : 'Register'}}</button>
-</div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="form" [disabled]="!this.form.valid">{{this.activeTab === this.tab.Login ? 'Log In' : 'Register'}}</button>
+    </div>
+</form>

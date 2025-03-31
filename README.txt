@@ -1,3 +1,5 @@
+environment setup
+
 New Migration:
 dotnet ef migrations add <migration name> --project TroyLibrary.Data --startup-project TroyLibrary.API --context TroyLibraryContext
 

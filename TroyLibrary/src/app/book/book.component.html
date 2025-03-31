@@ -60,17 +60,36 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">by {{ book.author}}</li>
-                    <li class="list-group-item">{{ book.isAvailable ? 'In Stock' : 'Not In Stock' }}</li>
                     <li class="list-group-item">
                         <span *ngFor="let n of numSequence(book.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
+                        @if (book.rating % 1 !== 0) {
+                            <i class="bi bi-star-half"></i>
+                        }
                         @if(book.rating === undefined || !book.rating) {
-                            Not Rated
+                            <span class="text-warning-emphasis">Not Yet Rated</span>
                         }
                     </li>
                 </ul>
                 <div class="card-body mt-auto">
-                    <a *ngIf="book.isAvailable" href="#" class="card-link">Checkout</a>
-                    <a *ngIf="!book.isAvailable" href="#" class="card-link">Return</a>
+                    @if (!this.isLibrarian) {
+                        @if (book.isAvailable) {
+                            <a href="#" class="card-link" (click)="this.checkOutBook($event, book)">Checkout</a>
+                        }
+                        @else {
+                            <strong class="text-danger-emphasis">Unavailable</strong>
+                        }
+                    }
+                    @if (this.isLibrarian) {
+                        @if (book.isAvailable) {
+                            <strong>In Stock</strong>
+                        }
+                        @else {
+                            <a href="#" class="card-link" (click)="this.returnBook($event, book)">Return</a>
+                            @if (book.isOverdue) {
+                                <span class="text-warning ps-3"><strong>Overdue</strong></span>
+                            }
+                        }
+                    }
                 </div>
             </div>
         </div>

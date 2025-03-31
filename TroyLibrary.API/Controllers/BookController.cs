@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using TroyLibrary.Common.Models;
 using TroyLibrary.Common.Models.Book;
 using TroyLibrary.Service.Interfaces;
@@ -56,7 +58,7 @@ namespace TroyLibrary.API.Controllers
         }
 
         [Authorize(Roles = "Librarian")]
-        [HttpPatch]
+        [HttpPatch("Update")]
         public async Task<CrudResponse> UpdateBook([FromBody] BookRequest request)
         {
             return new CrudResponse
@@ -72,6 +74,29 @@ namespace TroyLibrary.API.Controllers
             return new CrudResponse
             {
                 CompletedAt = await _bookService.RemoveBookAsync(bookId),
+            };
+        }
+
+        [Authorize(Roles = "Customer")]
+        [HttpPatch("Checkout")]
+        public async Task<BooleanResponse> CheckoutBook([FromQuery] int bookId)
+        {
+            return new BooleanResponse
+            {
+                Success = await _bookService.CheckoutBookAsync(
+                    bookId, 
+                    User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value
+                 ),
+            };
+        }
+
+        [Authorize(Roles = "Librarian")]
+        [HttpPatch("Return")]
+        public async Task<BooleanResponse> ReturnBook([FromQuery] int bookId)
+        {
+            return new BooleanResponse
+            {
+                Success = await _bookService.ReturnBookAsync(bookId),
             };
         }
     }

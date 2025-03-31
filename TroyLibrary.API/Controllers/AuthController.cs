@@ -17,16 +17,10 @@ namespace TroyLibrary.API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<TroyLibraryUser> _userManager;
-        private readonly SignInManager<TroyLibraryUser> _signInManager;
-        private readonly IConfiguration _configuration;
         private readonly IAuthService _authService;
 
-        public AuthController(UserManager<TroyLibraryUser> userManager, SignInManager<TroyLibraryUser> signInManager, IConfiguration configuration, IAuthService authService)
+        public AuthController(IAuthService authService)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
             _authService = authService;
         }
 

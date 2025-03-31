@@ -1,4 +1,5 @@
-﻿using TroyLibrary.Common;
+﻿using Microsoft.Extensions.Configuration;
+using TroyLibrary.Common;
 using TroyLibrary.Common.DTOs;
 using TroyLibrary.Data.Models;
 using TroyLibrary.Repo.Interfaces;
@@ -9,10 +10,12 @@ namespace TroyLibrary.Service
     public class BookService : IBookService
     {
         private readonly IBookRepo _bookRepo;
+        private readonly IConfiguration _config;
 
-        public BookService(IBookRepo bookRepo)
+        public BookService(IBookRepo bookRepo, IConfiguration config)
         {
             _bookRepo = bookRepo;
+            _config = config;
         }
 
         public async Task<BookDetailDTO?> GetBook(int bookId)
@@ -22,6 +25,13 @@ namespace TroyLibrary.Service
             if (book == null)
             {
                 return null;
+            }
+
+            var minutesString = _config["MinutesUntilOverdue"];
+            double minutes = 7200;
+            if (!string.IsNullOrWhiteSpace(minutesString))
+            {
+                minutes = double.Parse(_config["MinutesUntilOverdue"]);
             }
 
             return new BookDetailDTO
@@ -42,8 +52,8 @@ namespace TroyLibrary.Service
                 Publisher = book.Publisher,
                 CategoryName = book.Category.Name,
                 Category = (Enums.Category)book.CategoryId,
-                IsOverdue = book.CheckoutDate.HasValue && book.CheckoutDate.Value.AddDays(5) < DateTime.Now,
-                DueDate = book.CheckoutDate.HasValue ? book.CheckoutDate.Value.AddDays(5) : null,
+                IsOverdue = book.CheckoutDate.HasValue && book.CheckoutDate.Value.AddMinutes(minutes) < DateTime.Now,
+                DueDate = book.CheckoutDate.HasValue ? book.CheckoutDate.Value.AddMinutes(minutes) : null,
             };
         }
 
@@ -61,6 +71,12 @@ namespace TroyLibrary.Service
                 books = books.Take(count.Value);
             }
 
+            var minutesString = _config["MinutesUntilOverdue"];
+            double minutes = 7200;
+            if (!string.IsNullOrWhiteSpace(minutesString))
+            {
+                minutes = double.Parse(_config["MinutesUntilOverdue"]);
+            }
             return books
                 .Select(b => new BookDTO
                 {
@@ -71,8 +87,8 @@ namespace TroyLibrary.Service
                     CoverImage = b.CoverImage,
                     Rating = b.Reviews.Average(r => r.Rating),
                     IsAvailable = !b.CheckoutDate.HasValue,
-                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddDays(5) < DateTime.Now,
-                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddDays(5) : null,
+                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddMinutes(minutes) < DateTime.Now,
+                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddMinutes(minutes) : null,
                 })
                 .ToList();
         }
@@ -86,11 +102,17 @@ namespace TroyLibrary.Service
                 return null;
             }
 
-            if (!string.IsNullOrWhiteSpace(title))
+            if (!string.IsNullOrWhiteSpace(title) && title != "*")
             {
                 books = books.Where(b => b.Title.ToLower().Contains(title.ToLower()));
             }
 
+            var minutesString = _config["MinutesUntilOverdue"];
+            double minutes = 7200;
+            if (!string.IsNullOrWhiteSpace(minutesString))
+            {
+                minutes = double.Parse(_config["MinutesUntilOverdue"]);
+            }
             return books
                 .Select(b => new BookDTO
                 {
@@ -101,8 +123,8 @@ namespace TroyLibrary.Service
                     CoverImage = b.CoverImage,
                     Rating = b.Reviews.Average(r => r.Rating),
                     IsAvailable = !b.CheckoutDate.HasValue,
-                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddDays(5) < DateTime.Now,
-                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddDays(5) : null,
+                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddMinutes(minutes) < DateTime.Now,
+                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddMinutes(minutes) : null,
                 })
                 .ToList();
         }
@@ -188,6 +210,38 @@ namespace TroyLibrary.Service
             }
 
             return null;
+        }
+
+        public async Task<bool> CheckoutBookAsync(int bookId, string? userId)
+        {
+            if(string.IsNullOrWhiteSpace(userId))
+            {
+                return false;
+            }
+
+            var book = await this._bookRepo.GetBookAsync(bookId);
+
+            if (book == null || book.CheckoutDate.HasValue)
+            {
+                return false;
+            }
+            book.CheckoutDate = DateTime.Now;
+            book.TroyLibraryUserId = userId;
+            var result = await this._bookRepo.UpdateBookAsync(book);
+            return result != null;
+        }
+
+        public async Task<bool> ReturnBookAsync(int bookId)
+        {
+            var book = await this._bookRepo.GetBookAsync(bookId);
+            if (book == null || !book.CheckoutDate.HasValue)
+            {
+                return false;
+            }
+            book.CheckoutDate = null;
+            book.TroyLibraryUserId = null;
+            var result = await this._bookRepo.UpdateBookAsync(book);
+            return result != null;
         }
     }
 }

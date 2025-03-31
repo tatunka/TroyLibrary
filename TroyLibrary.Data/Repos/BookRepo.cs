@@ -61,18 +61,5 @@ namespace TroyLibrary.Data.Repos
             await this._context.SaveChangesAsync();
             return true;
         }
-
-        public async Task<bool> CheckoutBookAsync(int bookId, string userId)
-        {
-            var book = await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
-            if (book == null)
-            {
-                return false;
-            }
-            book.TroyLibraryUserId = userId;
-            book.CheckoutDate = DateTime.Now;
-            await this._context.SaveChangesAsync();
-            return true;
-        }
     }
 }
