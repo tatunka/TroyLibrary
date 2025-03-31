@@ -65,6 +65,7 @@ namespace TroyLibrary.API
                 {
                     options.RequireHttpsMetadata = false;
                     options.SaveToken = true;
+                    options.MapInboundClaims = false;
                     options.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
@@ -84,6 +85,7 @@ namespace TroyLibrary.API
             builder.Services.AddScoped<IBookService, BookService>();
             builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<ILookupService, LookupService>();
+            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IBookRepo, BookRepo>();
             builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
             builder.Services.AddScoped<ILookupRepo, LookupRepo>();

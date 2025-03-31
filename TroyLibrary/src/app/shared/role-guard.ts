@@ -17,7 +17,7 @@ export class RoleGuard implements CanActivate {
         if (allowedRoles === undefined || allowedRoles?.length === 0 || allowedRoles?.some(role => userRoles.includes(role))) {
             return true;
         }
-        this.modalService.open(LoginModalComponent, {centered: true });
+        this.modalService.open(LoginModalComponent, {centered: true, backdrop: 'static' });
         return false;
     }
 }
