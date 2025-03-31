@@ -38,7 +38,9 @@ export interface Book {
     description: string;
     coverImage: string;
     rating: number;
-    isAvailable: boolean
+    isAvailable: boolean;
+    isOverdue: boolean;
+    dueDate: Date;
 }
 
 export interface GetBooksResponse {

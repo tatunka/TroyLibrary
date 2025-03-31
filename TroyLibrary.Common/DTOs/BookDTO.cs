@@ -9,5 +9,7 @@
         public string CoverImage { get; set; }
         public double? Rating { get; set; }
         public bool IsAvailable { get; set; }
+        public bool IsOverdue { get; set; }
+        public DateTime? DueDate { get; set; }
     }
 }

@@ -42,6 +42,8 @@ namespace TroyLibrary.Service
                 Publisher = book.Publisher,
                 CategoryName = book.Category.Name,
                 Category = (Enums.Category)book.CategoryId,
+                IsOverdue = book.CheckoutDate.HasValue && book.CheckoutDate.Value.AddDays(5) < DateTime.Now,
+                DueDate = book.CheckoutDate.HasValue ? book.CheckoutDate.Value.AddDays(5) : null,
             };
         }
 
@@ -68,7 +70,9 @@ namespace TroyLibrary.Service
                     Description = b.Description,
                     CoverImage = b.CoverImage,
                     Rating = b.Reviews.Average(r => r.Rating),
-                    IsAvailable = !b.CheckoutDate.HasValue
+                    IsAvailable = !b.CheckoutDate.HasValue,
+                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddDays(5) < DateTime.Now,
+                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddDays(5) : null,
                 })
                 .ToList();
         }
@@ -96,7 +100,9 @@ namespace TroyLibrary.Service
                     Description = b.Description,
                     CoverImage = b.CoverImage,
                     Rating = b.Reviews.Average(r => r.Rating),
-                    IsAvailable = !b.CheckoutDate.HasValue
+                    IsAvailable = !b.CheckoutDate.HasValue,
+                    IsOverdue = b.CheckoutDate.HasValue && b.CheckoutDate.Value.AddDays(5) < DateTime.Now,
+                    DueDate = b.CheckoutDate.HasValue ? b.CheckoutDate.Value.AddDays(5) : null,
                 })
                 .ToList();
         }
