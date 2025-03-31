@@ -14,13 +14,13 @@ namespace TroyLibrary.Service
     {
         private readonly UserManager<TroyLibraryUser> _userManager;
         private readonly SignInManager<TroyLibraryUser> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IConfiguration _config;
 
         public AuthService(UserManager<TroyLibraryUser> userManager, SignInManager<TroyLibraryUser> signInManager, IConfiguration configuration)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
+            _config = configuration;
         }
 
         public async Task<RegisterResponse> Register(RegisterRequest request)
@@ -63,7 +63,7 @@ namespace TroyLibrary.Service
 
         public async Task<string> GenerateJwtToken(TroyLibraryUser user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:SecretKey"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var roles = await this._userManager.GetRolesAsync(user);
@@ -76,11 +76,18 @@ namespace TroyLibrary.Service
             };
             claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
 
+
+            var minutesString = _config["Jwt:ExpirationInMinutes"];
+            double minutes = 1440;
+            if (!string.IsNullOrWhiteSpace(minutesString))
+            {
+                minutes = double.Parse(minutesString);
+            }
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _config["Jwt:Issuer"],
+                audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddDays(30),
+                expires: DateTime.Now.AddMinutes(minutes),
                 signingCredentials: credentials
              );
 

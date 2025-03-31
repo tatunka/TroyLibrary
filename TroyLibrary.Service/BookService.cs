@@ -31,7 +31,7 @@ namespace TroyLibrary.Service
             double minutes = 7200;
             if (!string.IsNullOrWhiteSpace(minutesString))
             {
-                minutes = double.Parse(_config["MinutesUntilOverdue"]);
+                minutes = double.Parse(minutesString);
             }
 
             return new BookDetailDTO
@@ -75,7 +75,7 @@ namespace TroyLibrary.Service
             double minutes = 7200;
             if (!string.IsNullOrWhiteSpace(minutesString))
             {
-                minutes = double.Parse(_config["MinutesUntilOverdue"]);
+                minutes = double.Parse(minutesString);
             }
             return books
                 .Select(b => new BookDTO
@@ -111,7 +111,7 @@ namespace TroyLibrary.Service
             double minutes = 7200;
             if (!string.IsNullOrWhiteSpace(minutesString))
             {
-                minutes = double.Parse(_config["MinutesUntilOverdue"]);
+                minutes = double.Parse(minutesString);
             }
             return books
                 .Select(b => new BookDTO
