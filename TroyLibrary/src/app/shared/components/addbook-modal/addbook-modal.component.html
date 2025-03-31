@@ -1,0 +1,37 @@
+<div class="modal-header">
+    <h4>Add New Book</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="this.close()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="this.form">
+        <div class="mb-3">
+            <label for="title"><strong>Title</strong></label>
+            <input id="title" class="form-control mb-3" type="text" name="title" formControlName="title"/>
+            <label for="author"><strong>Author</strong></label>
+            <input id="author" class="form-control mb-3" type="text" name="author" formControlName="author"/>
+            <label for="description"><strong>Description</strong></label>
+            <textarea id="description" class="form-control mb-3" row="5" type="text" name="description" formControlName="description"></textarea>
+            <label for="coverImage"><strong>Cover Image</strong></label>
+            <input id="coverImage" class="form-control mb-3" type="text" name="coverImage" formControlName="coverImage"/>
+            <label for="publisher"><strong>Publisher</strong></label>
+            <input id="publisher" class="form-control mb-3" type="text" name="publisher" formControlName="publisher"/>
+            <label for="publicationDate"><strong>Publication Date</strong></label>
+            <input id="publicationDate" class="form-control mb-3" type="date" name="publicationDate" formControlName="publicationDate"/>
+            <div class="mb-3">
+                <label for="category" class="form-label"><strong>Category</strong></label>
+                <select class="form-select" id="categoryOptions" formControlName="category" type="number">
+                    @for (category of categories; track category) {
+                        <option [value]="category.id">{{category.value}}</option>
+                    }
+                </select>
+            </div>
+            <label for="isbn"><strong>ISBN</strong></label>
+            <input id="isbn" class="form-control mb-3" maxlength="13" type="text" name="isbn" formControlName="isbn"/>
+            <label for="pageCount"><strong>Page Count</strong></label>
+            <input id="pageCount" class="form-control mb-3" type="number" name="pageCount" formControlName="pageCount"/>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!this.form.valid" (click)="this.addBook()">Add Book</button>
+</div>

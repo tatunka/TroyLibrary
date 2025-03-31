@@ -15,6 +15,14 @@ export class ToastService {
         this.toasts.push({ body: body, classname: classname })
     }
 
+    showSuccess(body: string) {
+        this.toasts.push( {body: body, classname: 'bg-success text-light'});
+    }
+
+    showError(body: string) {
+        this.toasts.push({ body: body, classname: 'bg-danger text-light'});
+    }
+
     remove(toast: ToastInfo) {
         this.toasts = this.toasts.filter(t => t != toast);
     }

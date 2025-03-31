@@ -1,15 +1,11 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { environment } from "../../../environments/environment";
 import { Injectable } from "@angular/core";
-import { GetBookResponse, GetBooksResponse } from "../../book/models";
+import { BookRequest, GetBookResponse, GetBooksResponse } from "../../book/models";
 import { Observable } from "rxjs";
+import { CrudResponse } from "../models/models";
 
 const endpoint = environment.apiUrl + 'api/book';
-const httpOptions = {
-    headers: new HttpHeaders ({
-        'Content-Type': 'application/json'
-    })
-};
 
 @Injectable({
     providedIn: 'root'
@@ -28,5 +24,17 @@ export class BookService {
 
     public searchBooks(title: string): Observable<GetBooksResponse> {
         return this.http.get<GetBooksResponse>(`${endpoint}/search?title=${title}`);
+    }
+
+    public createBook(request: BookRequest): Observable<GetBookResponse> {
+        return this.http.post<GetBookResponse>(`${endpoint}/create`, request);
+    }
+
+    public updateBook(request: BookRequest): Observable<CrudResponse> {
+        return this.http.patch<CrudResponse>(`${endpoint}/update`, request);
+    }
+
+    public removeBook(bookId: number): Observable<CrudResponse> {
+        return this.http.delete<CrudResponse>(`${endpoint}/remove?bookid=${bookId}`);
     }
 }

@@ -36,7 +36,7 @@
                 <strong><label for="category" class="form-label">Category</label></strong>
                 <input readonly class="form-control-plaintext" list="categoryOptions" id="category" [value]="this.bookDetail?.categoryName">
                 <datalist id="categoryOptions">
-                    @for (category of categories; track category.value) {
+                    @for (category of categories; track category) {
                         <option [value]="category.value">
                     }
                 </datalist>

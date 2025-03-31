@@ -84,7 +84,7 @@ namespace TroyLibrary.Service
 
             if (!string.IsNullOrWhiteSpace(title))
             {
-                books = books.Where(b => b.Title.Contains(title));
+                books = books.Where(b => b.Title.ToLower().Contains(title.ToLower()));
             }
 
             return books
@@ -101,7 +101,7 @@ namespace TroyLibrary.Service
                 .ToList();
         }
 
-        public async Task<DateTime?> CreateBookAsync(BookDataDTO book)
+        public async Task<BookDetailDTO?> CreateBookAsync(BookDataDTO book)
         {
             var b = new Book
             {
@@ -113,14 +113,28 @@ namespace TroyLibrary.Service
                 ISBN = book.ISBN,
                 PageCount = book.PageCount,
                 Publisher = book.Publisher,
-                CategoryId = (int)book.Category
+                CategoryId = (int)book.Category,
+                InStock = true,
             };
 
-             var newBook = await this._bookRepo.CreateBookAsync(b);
+            var newBook = await this._bookRepo.CreateBookAsync(b);
 
             if (newBook != null)
             {
-                return DateTime.Now;
+                return new BookDetailDTO
+                {
+                    BookId = newBook.BookId,
+                    Title = newBook.Title,
+                    Author = newBook.Author,
+                    Description = newBook.Description,
+                    CoverImage = newBook.CoverImage,
+                    Publisher = newBook.Publisher,
+                    PublicationDate = newBook.PublicationDate,
+                    ISBN = newBook.ISBN,
+                    PageCount = newBook.PageCount,
+                    Category = (Enums.Category)newBook.CategoryId,
+                    CategoryName = newBook.Category?.Name ?? Enum.GetName(typeof (Enums.Category), newBook.CategoryId) ?? "Unknown",
+                };
             }
             
             return null;

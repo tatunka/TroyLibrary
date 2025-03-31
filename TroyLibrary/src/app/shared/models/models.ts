@@ -15,6 +15,6 @@ export enum Lookups {
     Category = 'Category'
 }
 
-export interface crudResponse {
+export interface CrudResponse {
     completedAt: Date
 }

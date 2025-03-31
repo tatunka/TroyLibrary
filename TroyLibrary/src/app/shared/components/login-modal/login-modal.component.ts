@@ -63,15 +63,15 @@ export class LoginModalComponent {
       this.auth.login(request).subscribe({
         next: (value: LoginResponse) => {
           if (value.token) {
-            this.toastService.show('Log in successful!', 'bg-success text-light');
+            this.toastService.showSuccess('Log in successful!');
             this.activeModal.close();
             this.router.navigate(['/book']);
           }
           else {
-            this.toastService.show('Incorrect User Name / Password', 'bg-danger text-light');
+            this.toastService.showError('Incorrect User Name / Password');
           }
         }, 
-        error: (error) => this.toastService.show(error, 'bg-danger text-light')
+        error: (error) => this.toastService.showError(error.message)
       });
     }
     else if (this.activeTab === Tab.Register) {
@@ -82,11 +82,11 @@ export class LoginModalComponent {
       this.auth.register(request).subscribe({
         next: (value: RegisterResponse) => {
           localStorage.setItem('token', value.token);
-          this.toastService.show('Registration succesful!', 'bg-success text-light');
+          this.toastService.showSuccess('Registration succesful!');
           this.activeModal.close();
           this.router.navigate(['/book']);
         },
-        error: (error) => this.toastService.show(error, 'bg-danger text-light')
+        error: (error) => this.toastService.showError(error.message)
       });
     }
   }

@@ -4,6 +4,7 @@ import { LoginModalComponent } from './shared/components/login-modal/login-modal
 import { AuthService } from './shared/services/auth.service';
 import { Router } from '@angular/router';
 import { Role } from './shared/models/auth-models';
+import { AddbookModalComponent } from './shared/components/addbook-modal/addbook-modal.component';
 
 @Component({
   selector: 'app-root',
@@ -19,12 +20,19 @@ export class AppComponent {
   //expose enum to template
   public role = Role;
 
-  login() {
-    this.modalService.open(LoginModalComponent, {centered: true })
+  login(event: MouseEvent) {
+    event.preventDefault();
+    this.modalService.open(LoginModalComponent, { centered: true })
   }
 
-  logout() {
+  logout(event: MouseEvent) {
+    event?.preventDefault()
     this.auth.logout();
     this.router.navigate(['/']);
+  }
+
+  addBook(event: MouseEvent) {
+    event.preventDefault();
+    this.modalService.open(AddbookModalComponent, { centered: true })
   }
 }
