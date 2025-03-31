@@ -2,9 +2,9 @@
 {
     public class ReviewDTO
     {
-        public int ReviewId { get; set; }
-        public string? Username { get; set; }
-        public int Rating { get; set; }
-        public string Text { get; set; }
+        public required int ReviewId { get; set; }
+        public required string Username { get; set; }
+        public required int Rating { get; set; }
+        public required string Text { get; set; }
     }
 }

@@ -5,7 +5,6 @@ export interface BookDetail extends Book {
     publicationDate: Date;
     isbn: string;
     pageCount: number;
-    reviews: Review[];
     category: Category;
     categoryName: string;
     CheckoutDate: Date;
@@ -22,13 +21,6 @@ export interface BookData {
     category: Category;
     isbn: string;
     pageCount: number;
-}
-
-export interface Review {
-    reviewId: number;
-    userName: string;
-    rating: number;
-    text: string;
 }
 
 export interface Book {

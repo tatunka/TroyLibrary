@@ -1,15 +1,18 @@
-import { AfterViewInit, Component, ElementRef, Inject, LOCALE_ID, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef,OnInit, ViewChild } from '@angular/core';
 import { BookService } from '../../shared/services/book.service';
-import { BookData, BookDetail, BookRequest, GetBookResponse, Review } from '../models';
+import { BookData, BookDetail, BookRequest, GetBookResponse } from '../models';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LookupService } from '../../shared/services/lookup.service';
 import { LookupItem, LookupResponse } from '../../shared/models/lookup-models';
-import { Category, CrudResponse, Lookups } from '../../shared/models/models';
+import { CrudResponse, GetReviewsResponse, Lookups, Review } from '../../shared/models/models';
 import { AuthService } from '../../shared/services/auth.service';
 import { Role } from '../../shared/models/auth-models';
 import { ToastService } from '../../shared/components/toast/toast-service';
-import { DatePipe, formatDate } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ReviewService } from '../../shared/services/review.service';
+
+const datePipe = new DatePipe('en-US');
 
 @Component({
   selector: 'app-book-detail',
@@ -21,6 +24,7 @@ export class BookDetailComponent implements OnInit {
 
   constructor(
     private bookService: BookService, 
+    private reviewService: ReviewService,
     private lookupService: LookupService,
     private toast: ToastService,
     protected auth: AuthService,
@@ -44,7 +48,7 @@ export class BookDetailComponent implements OnInit {
   });
 
   bookId!: number;
-  bookDetail!: BookDetail;
+  bookDetail?: BookDetail;
   reviews: Review[] = [];
   categories: LookupItem[] = [];
   isLibrarian!: boolean;
@@ -67,8 +71,6 @@ export class BookDetailComponent implements OnInit {
     this.bookService.getBook(this.bookId).subscribe({
       next: (response: GetBookResponse) => {
         this.bookDetail = response.bookDetail;
-        this.reviews = this.bookDetail?.reviews?.length > 0 ? this.bookDetail.reviews : [];
-        var datePipe = new DatePipe('en-US');
         this.pubDate = datePipe.transform(this.bookDetail.publicationDate);
         this.form = new FormGroup({
           title: new FormControl(response.bookDetail.title, Validators.required),
@@ -94,6 +96,14 @@ export class BookDetailComponent implements OnInit {
         console.log(error.message);
       }
     });
+    //get reviews
+    this.reviewService.GetReviews(this.bookId).subscribe({
+      next: (response: GetReviewsResponse) => this.reviews = response.reviews,
+      error: (error) => {
+        this.toast.showError('Unable to retrieve reviews for this book');
+        console.log(error.message);
+      }
+    });
     //get categories for dropdown
     this.lookupService.lookup(Lookups.Category).subscribe({
       next: (response: LookupResponse) => this.categories = response.items,
@@ -116,7 +126,7 @@ export class BookDetailComponent implements OnInit {
       next: (response: CrudResponse) => {
         if (response.completedAt) {
           this.toast.showSuccess('Changes saved successfully!');
-          this.bookDetail.publicationDate = request.bookData.publicationDate;
+          this.pubDate = datePipe.transform(request.bookData.publicationDate, 'M/d/yyyy');
           this.form.markAsPristine();
         }
         else {

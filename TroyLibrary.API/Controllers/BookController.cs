@@ -46,7 +46,7 @@ namespace TroyLibrary.API.Controllers
         }
 
         [Authorize(Roles = "Librarian")]
-        [HttpPost("Create")]
+        [HttpPost]
         public async Task<GetBookResponse> CreateBook([FromBody] BookRequest request)
         {
             return new GetBookResponse
@@ -56,7 +56,7 @@ namespace TroyLibrary.API.Controllers
         }
 
         [Authorize(Roles = "Librarian")]
-        [HttpPatch("Update")]
+        [HttpPatch]
         public async Task<CrudResponse> UpdateBook([FromBody] BookRequest request)
         {
             return new CrudResponse
@@ -66,7 +66,7 @@ namespace TroyLibrary.API.Controllers
         }
 
         [Authorize(Roles = "Librarian")]
-        [HttpDelete("Remove")]
+        [HttpDelete]
         public async Task<CrudResponse> RemoveBook([FromQuery] int bookId)
         {
             return new CrudResponse

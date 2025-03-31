@@ -27,14 +27,14 @@ export class BookService {
     }
 
     public createBook(request: BookRequest): Observable<GetBookResponse> {
-        return this.http.post<GetBookResponse>(`${endpoint}/create`, request);
+        return this.http.post<GetBookResponse>(`${endpoint}`, request);
     }
 
     public updateBook(request: BookRequest): Observable<CrudResponse> {
-        return this.http.patch<CrudResponse>(`${endpoint}/update`, request);
+        return this.http.patch<CrudResponse>(`${endpoint}`, request);
     }
 
     public removeBook(bookId: number): Observable<CrudResponse> {
-        return this.http.delete<CrudResponse>(`${endpoint}/remove?bookid=${bookId}`);
+        return this.http.delete<CrudResponse>(`${endpoint}?bookid=${bookId}`);
     }
 }

@@ -16,5 +16,23 @@ export enum Lookups {
 }
 
 export interface CrudResponse {
-    completedAt: Date
+    completedAt: Date;
+}
+
+export interface CreateReviewRequest {
+    userId: string;
+    bookId: number;
+    rating: number;
+    text: string;
+}
+
+export interface GetReviewsResponse {
+    reviews: Review[];
+}
+
+export interface Review {
+    reviewId: number;
+    userName: string;
+    rating: number;
+    text: string;
 }

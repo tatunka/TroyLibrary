@@ -82,8 +82,10 @@ namespace TroyLibrary.API
 
             // Add Services
             builder.Services.AddScoped<IBookService, BookService>();
+            builder.Services.AddScoped<IReviewService, ReviewService>();
             builder.Services.AddScoped<ILookupService, LookupService>();
             builder.Services.AddScoped<IBookRepo, BookRepo>();
+            builder.Services.AddScoped<IReviewRepo, ReviewRepo>();
             builder.Services.AddScoped<ILookupRepo, LookupRepo>();
 
             var app = builder.Build();
