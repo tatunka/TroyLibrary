@@ -20,7 +20,7 @@ export class ReviewModalComponent {
   ) {}
 
   @Input() public bookId?: number;
-  @Input() public callback: any;
+  @Input() public callback: () => void = () => null;
 
   form = new FormGroup({
     rating: new FormControl<number>(0, Validators.required),

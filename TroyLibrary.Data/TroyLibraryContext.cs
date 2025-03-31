@@ -30,9 +30,7 @@ namespace TroyLibrary.Data
             modelBuilder.Entity<TroyLibraryUser>()
                 .ToTable("TroyLibraryUser");
             modelBuilder.Entity<Book>()
-                .ToTable("Book")
-                .Property(b => b.InStock)
-                .HasDefaultValue(true);
+                .ToTable("Book");
             modelBuilder.Entity<Category>()
                 .ToTable("Category");
             modelBuilder.Entity<Review>()

@@ -120,7 +120,6 @@ namespace TroyLibrary.Service
                 PageCount = book.PageCount,
                 Publisher = book.Publisher,
                 CategoryId = (int)book.Category,
-                InStock = true,
             };
 
             var newBook = await this._bookRepo.CreateBookAsync(b);

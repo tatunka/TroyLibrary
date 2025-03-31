@@ -15,7 +15,7 @@ namespace TroyLibrary.Data.Repos
 
         public IQueryable<Book> GetBooks()
         {
-            return this._context.Books.Where(b => b.InStock);
+            return this._context.Books;
         }
 
         public IQueryable<Book> GetRandomBooks()
@@ -58,6 +58,19 @@ namespace TroyLibrary.Data.Repos
                 return false;
             }
             this._context.Books.Remove(book);
+            await this._context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> CheckoutBookAsync(int bookId, string userId)
+        {
+            var book = await this._context.Books.FirstOrDefaultAsync(b => b.BookId == bookId);
+            if (book == null)
+            {
+                return false;
+            }
+            book.TroyLibraryUserId = userId;
+            book.CheckoutDate = DateTime.Now;
             await this._context.SaveChangesAsync();
             return true;
         }

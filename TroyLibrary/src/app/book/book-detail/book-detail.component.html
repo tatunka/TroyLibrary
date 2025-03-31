@@ -7,7 +7,7 @@
     <form [formGroup]="this.form">
         <div class="row mt-3"> 
             <div class="col-6 text-center">
-                <img [src]="this.bookDetail?.coverImage" class="card-img-to"  alt="...">
+                <img [src]="this.bookDetail?.coverImage" class="card-img-to" style="width:640px;"  alt="...">
             </div>
             <div class="col-3">
                 <div class="mb-3">
@@ -104,9 +104,13 @@
             <div class="row">
                 @for (review of this.reviews; track review){
                     <div class="col-3 mb-5">
-                        <strong>{{review.username}}</strong>
-                        <textarea readonly class="form-control-plaintext" rows="3" [value]="review.text"></textarea>
-                        <input type="text" readonly class="form-control-plaintext" [value]="review.rating">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">{{review.username}}</h5>
+                                <span *ngFor="let n of numSequence(review.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
+                                <p class="card-text">{{review.text}}</p>
+                            </div>
+                        </div>
                     </div>
                 }
             </div>

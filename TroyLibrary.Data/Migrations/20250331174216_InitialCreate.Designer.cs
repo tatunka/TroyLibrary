@@ -12,7 +12,7 @@ using TroyLibrary.Data;
 namespace TroyLibrary.Data.Migrations
 {
     [DbContext(typeof(TroyLibraryContext))]
-    [Migration("20250326230349_InitialCreate")]
+    [Migration("20250331174216_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -188,11 +188,6 @@ namespace TroyLibrary.Data.Migrations
                         .IsRequired()
                         .HasMaxLength(13)
                         .HasColumnType("nvarchar(13)");
-
-                    b.Property<bool>("InStock")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(true);
 
                     b.Property<int>("PageCount")
                         .HasColumnType("int");
@@ -413,6 +408,7 @@ namespace TroyLibrary.Data.Migrations
                     b.HasOne("TroyLibrary.Data.Models.TroyLibraryUser", "TroyLibraryUser")
                         .WithMany("Reviews")
                         .HasForeignKey("TroyLibraryUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");

@@ -172,6 +172,13 @@ export class BookDetailComponent implements OnInit {
   reviewBook() {
     const modalRef: NgbModalRef = this.modalService.open(ReviewModalComponent, {});
     modalRef.componentInstance.bookId = this.bookId;
-    modalRef.componentInstance.callback = this.refreshReviews(this.bookId);
+    modalRef.componentInstance.callback = () => {
+      modalRef.close();
+      this.refreshReviews(this.bookId);
+    };
+  }
+
+  numSequence(n: number): Array<number> {
+    return Array(n);
   }
 }

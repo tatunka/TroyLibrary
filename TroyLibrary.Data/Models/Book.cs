@@ -28,8 +28,6 @@ namespace TroyLibrary.Data.Models
         public required string ISBN { get; set; }
         [Required]
         public int PageCount { get; set; }
-        [Required]
-        public bool InStock { get; set; }
         public DateTime? CheckoutDate { get; set; }
 
         //Navigation properties

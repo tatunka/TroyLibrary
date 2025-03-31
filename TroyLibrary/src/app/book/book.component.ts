@@ -159,4 +159,11 @@ export class BookComponent implements OnInit {
     this.filter();
   }
 
+  numSequence(n?: number): Array<number> {
+    if (n) {
+      return Array(n);
+    }
+    return [];
+  }
+
 }

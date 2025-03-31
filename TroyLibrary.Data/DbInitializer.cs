@@ -47,7 +47,6 @@ namespace TroyLibrary.Data
                     .RuleFor(b => b.PublicationDate, f => f.Date.Past())
                     .RuleFor(b => b.ISBN, f => f.Commerce.Ean13())
                     .RuleFor(b => b.PageCount, f => f.Random.Number(100, 500))
-                    .RuleFor(b => b.InStock, f => true)
                     .Generate(200)
                     );
             context.SaveChanges();

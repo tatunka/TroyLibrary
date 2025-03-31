@@ -51,7 +51,7 @@
     <div class="row">
         <div class="col-3 pb-5" *ngFor="let book of displayedBooks">
             <div class="card d-flex flex-column" style="width: 18rem;">
-                <a [routerLink]="['/detail', book.bookId]">
+                <a [routerLink]="['/detail', book.bookId]" style="height:214px;">
                     <img [src]="book.coverImage" class="card-img-to" style="height:214px;" alt="Troy Library">
                 </a>
                 <div class="card-body d-flex flex-column flex-grow-1" style="height:184px">
@@ -61,7 +61,12 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">by {{ book.author}}</li>
                     <li class="list-group-item">{{ book.isAvailable ? 'In Stock' : 'Not In Stock' }}</li>
-                    <li class="list-group-item">{{book.rating ?? "0.0"}} / 5</li>
+                    <li class="list-group-item">
+                        <span *ngFor="let n of numSequence(book.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
+                        @if(book.rating === undefined || !book.rating) {
+                            Not Rated
+                        }
+                    </li>
                 </ul>
                 <div class="card-body mt-auto">
                     <a *ngIf="book.isAvailable" href="#" class="card-link">Checkout</a>

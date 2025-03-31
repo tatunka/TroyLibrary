@@ -185,7 +185,6 @@ namespace TroyLibrary.Data.Migrations
                     PublicationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ISBN = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
                     PageCount = table.Column<int>(type: "int", nullable: false),
-                    InStock = table.Column<bool>(type: "bit", nullable: false, defaultValue: true),
                     CheckoutDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
@@ -228,7 +227,8 @@ namespace TroyLibrary.Data.Migrations
                         name: "FK_Review_TroyLibraryUser_TroyLibraryUserId",
                         column: x => x.TroyLibraryUserId,
                         principalTable: "TroyLibraryUser",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
