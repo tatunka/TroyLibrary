@@ -1,4 +1,5 @@
-﻿using TroyLibrary.Common.DTOs;
+﻿using Microsoft.AspNetCore.Identity;
+using TroyLibrary.Common.DTOs;
 using TroyLibrary.Data.Models;
 using TroyLibrary.Data.Repos.Interfaces;
 using TroyLibrary.Service.Interfaces;
@@ -28,8 +29,19 @@ namespace TroyLibrary.Service
                 }).ToList();
         }
 
-        public async Task<ReviewDTO> CreateReview(string userId, int bookId, int rating, string text)
+        public async Task<ReviewDTO> CreateReview(string? userId, int bookId, int rating, string text)
         {
+            if (userId == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var reviews = this._reviewRepo.GetReviews(bookId);
+            if (reviews.Any(r => r.TroyLibraryUserId == userId))
+            {
+                throw new Exception("You have reviewed this book");
+            }
+
             var r = await _reviewRepo.CreateReview(
                 new Review
                 {
@@ -42,7 +54,7 @@ namespace TroyLibrary.Service
             return new ReviewDTO
             {
                 ReviewId = r.ReviewId,
-                Username = r.TroyLibraryUser.UserName,
+                Username = r.TroyLibraryUser?.UserName ?? "Unknown User",
                 Text = r.Text,
                 Rating = r.Rating,
             };

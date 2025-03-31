@@ -45,14 +45,14 @@
                 <div class="mb-3">
                     <label for="category" class="form-label"><strong>Category</strong></label>
                     @if(this.isLibrarian) {
-                        <select class="form-select" id="categoryOptions" formControlName="category" type="number">
+                        <select class="form-select" id="category" formControlName="category" type="number">
                             @for (category of categories; track category) {
                                 <option [value]="category.id">{{category.value}}</option>
                             }
                         </select>
                     }
                     @else {
-                        <input type="text" readonly class="form-control-plaintext" id="publisher" [value]="this.bookDetail?.categoryName">
+                        <input type="text" readonly class="form-control-plaintext" id="category" [value]="this.bookDetail?.categoryName">
                     }
                 </div>
                 <div class="mb-3">
@@ -104,7 +104,7 @@
             <div class="row">
                 @for (review of this.reviews; track review){
                     <div class="col-3 mb-5">
-                        <strong>{{review.userName}}</strong>
+                        <strong>{{review.username}}</strong>
                         <textarea readonly class="form-control-plaintext" rows="3" [value]="review.text"></textarea>
                         <input type="text" readonly class="form-control-plaintext" [value]="review.rating">
                     </div>

@@ -20,7 +20,6 @@ export interface CrudResponse {
 }
 
 export interface CreateReviewRequest {
-    userId: string;
     bookId: number;
     rating: number;
     text: string;
@@ -32,7 +31,7 @@ export interface GetReviewsResponse {
 
 export interface Review {
     reviewId: number;
-    userName: string;
+    username: string;
     rating: number;
     text: string;
 }

@@ -47,7 +47,7 @@ namespace TroyLibrary.Service
             };
         }
 
-        public ICollection<BookDTO>? GetFeaturedBooks(int? count = 10)
+        public ICollection<BookDTO>? GetFeaturedBooks(int? count = 12)
         { 
             var books = this._bookRepo.GetRandomBooks();
 

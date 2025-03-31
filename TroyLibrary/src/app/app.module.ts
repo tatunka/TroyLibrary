@@ -12,6 +12,7 @@ import { ToastService } from './shared/components/toast/toast-service';
 import { JwtModule } from '@auth0/angular-jwt';
 import { authInterceptor } from './shared/interceptors/auth-interceptor';
 import { AddbookModalComponent } from './shared/components/addbook-modal/addbook-modal.component';
+import { ReviewModalComponent } from './shared/components/review-modal/review-modal.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -23,6 +24,7 @@ export function tokenGetter() {
     LoginModalComponent,
     BasicToastComponent,
     AddbookModalComponent,
+    ReviewModalComponent,
   ],
   imports: [
     BrowserModule,

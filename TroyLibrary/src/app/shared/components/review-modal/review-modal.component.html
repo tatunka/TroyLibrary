@@ -1,0 +1,17 @@
+<div class="modal-header">
+    <h4>Write A Review!</h4>
+    <button type="button" class="btn-close" aria-label="Close" (click)="this.close()"></button>
+</div>
+<div class="modal-body">
+    <form [formGroup]="this.form">
+        <div class="mb-3">
+            <label for="rating"><strong>Rating</strong></label>
+            <input id="rating" class="form-control mb-3" type="number" name="rating" formControlName="rating" min="0" max="5"/>
+            <label for="text"><strong>Comment</strong></label>
+            <textarea id="text" class="form-control mb-3" row="5" type="text" name="text" formControlName="text"></textarea>
+        </div>
+    </form>
+</div>
+<div class="modal-footer">
+    <button type="button" class="btn btn-primary" [disabled]="!this.form.valid" (click)="this.postReview()">Post Review</button>
+</div>

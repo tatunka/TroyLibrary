@@ -28,11 +28,6 @@ namespace TroyLibrary.Data.Repos
                 .Skip(skipper);
         }
 
-        public IQueryable<Book> GetFeaturedBooks()
-        {
-            return this._context.Books.Where(b => b.InStock);
-        }
-
         public async Task<Book?> GetBookAsync(int bookId)
         {
             return await this._context.Books

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.IdentityModel.Tokens.Jwt;
 using TroyLibrary.Common.Models.Review;
 using TroyLibrary.Service.Interfaces;
 
@@ -28,9 +29,15 @@ namespace TroyLibrary.API.Controllers
         [HttpPost]
         public async Task<GetReviewsResponse> CreateReview([FromBody] CreateReviewRequest review)
         {
+            var calims = User.Claims;
+
             return new GetReviewsResponse
             {
-                Reviews = [await _reviewService.CreateReview(review.UserId, review.BookId, review.Rating, review.Text)],
+                Reviews = [await _reviewService.CreateReview(
+                    User.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Sub)?.Value, 
+                    review.BookId, 
+                    review.Rating, 
+                    review.Text)],
             };
         }
     }

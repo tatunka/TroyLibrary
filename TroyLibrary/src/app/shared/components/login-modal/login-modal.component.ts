@@ -39,11 +39,13 @@ export class LoginModalComponent {
   public tab = Tab;
   public role = Role;
 
-  selectLoginTab() {
+  selectLoginTab(event: MouseEvent) {
+    event.preventDefault();
     this.activeTab = Tab.Login;
   }
 
-  selectRegisterTab() {
+  selectRegisterTab(event: MouseEvent) {
+    event.preventDefault();
     this.activeTab = Tab.Register;
   }
 

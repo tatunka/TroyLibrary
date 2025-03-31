@@ -11,6 +11,8 @@ import { ToastService } from '../../shared/components/toast/toast-service';
 import { DatePipe } from '@angular/common';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReviewService } from '../../shared/services/review.service';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+import { ReviewModalComponent } from '../../shared/components/review-modal/review-modal.component';
 
 const datePipe = new DatePipe('en-US');
 
@@ -27,6 +29,7 @@ export class BookDetailComponent implements OnInit {
     private reviewService: ReviewService,
     private lookupService: LookupService,
     private toast: ToastService,
+    private modalService: NgbModal,
     protected auth: AuthService,
     private route: ActivatedRoute,
     private router: Router
@@ -84,6 +87,7 @@ export class BookDetailComponent implements OnInit {
           pageCount: new FormControl<number>(response.bookDetail.pageCount, Validators.required),
         });
         setTimeout(() => {
+          //auto-size description text area
           if (this.descriptionTextArea) {
             var textarea = this.descriptionTextArea.nativeElement;
             textarea.style.height = 'auto';
@@ -96,14 +100,7 @@ export class BookDetailComponent implements OnInit {
         console.log(error.message);
       }
     });
-    //get reviews
-    this.reviewService.GetReviews(this.bookId).subscribe({
-      next: (response: GetReviewsResponse) => this.reviews = response.reviews,
-      error: (error) => {
-        this.toast.showError('Unable to retrieve reviews for this book');
-        console.log(error.message);
-      }
-    });
+    this.refreshReviews(this.bookId);
     //get categories for dropdown
     this.lookupService.lookup(Lookups.Category).subscribe({
       next: (response: LookupResponse) => this.categories = response.items,
@@ -112,8 +109,6 @@ export class BookDetailComponent implements OnInit {
         console.log(error.message);
       }
     });
-    //get reviews
-    //TODO: get reviews
   }
 
   updateBook() {
@@ -140,6 +135,17 @@ export class BookDetailComponent implements OnInit {
     })
   }
 
+  refreshReviews(bookId: number) {
+ //get reviews
+    this.reviewService.GetReviews(bookId).subscribe({
+      next: (response: GetReviewsResponse) => this.reviews = response.reviews,
+      error: (error) => {
+        this.toast.showError('Unable to retrieve reviews for this book');
+        console.log(error.message);
+      }
+    });
+  }
+
   checkOutBook() {
 
   }
@@ -164,6 +170,8 @@ export class BookDetailComponent implements OnInit {
   }
 
   reviewBook() {
-    
+    const modalRef: NgbModalRef = this.modalService.open(ReviewModalComponent, {});
+    modalRef.componentInstance.bookId = this.bookId;
+    modalRef.componentInstance.callback = this.refreshReviews(this.bookId);
   }
 }
