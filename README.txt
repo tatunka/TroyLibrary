@@ -45,6 +45,8 @@
 	'Double Sunday'. You will not see books written by other authors with those titles. In other words, filtering within a category is
 	an OR, but filtering between categories is an AND.
 7. Sorting is not cascading.
+8. Librarians can edit and delete books from the book detail screen. They can also view due dates here.
+9. Librarians can add books by clicking the 'Add Book' button on the book list screen. This button only appears for librarians.
 
 ************************************
 **		 Useful Commands		  **

@@ -1,8 +1,8 @@
 <div class="container">
     <!--Book Details-->
     <span class="h1 pull-left">{{this.bookDetail?.title}}</span>
-    @if (this.isLibrarian && this.bookDetail?.checkoutDate) {
-        <span class="h4"> - (checked out on {{this.bookDetail?.checkoutDate | date: 'M/d/yyyy'}})
+    @if (this.isLibrarian && this.bookDetail?.dueDate) {
+        <span class="h4"> - (Due back by {{this.bookDetail?.dueDate | date: 'M/d/yyyy'}})
             @if (this.bookDetail?.isOverdue) {
                 <span class="text-danger ps-2">Overdue</span>
             }
