@@ -1,13 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Extensions;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using TroyLibrary.Common.Models.Auth;
-using TroyLibrary.Data.Models;
 using TroyLibrary.Service.Interfaces;
 
 namespace TroyLibrary.API.Controllers

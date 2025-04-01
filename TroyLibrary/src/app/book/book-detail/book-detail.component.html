@@ -63,13 +63,17 @@
                     <div class="row">
                         <div class="col-auto">
                             <strong><label for="rating">Rating</label></strong>
-                            <span class="ps-3">
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if (this.bookDetail?.rating) {
+                            <div class="col-auto pt-2 pe-0">
                                 <span *ngFor="let n of this.numSequence(this.bookDetail?.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
                                     @if ((this.bookDetail?.rating ?? 0) % 1 !== 0) {
                                         <i class="bi bi-star-half"></i>
                                     }
-                            </span>
-                        </div>
+                            </div>
+                        }
                         <div class="col-auto">
                             <input type="text" readonly class="form-control-plaintext" id="rating" [value]="this.bookDetail?.rating ?? 'Not Rated'">
                         </div>

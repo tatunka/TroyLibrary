@@ -15,7 +15,9 @@ import { AddbookModalComponent } from './shared/components/addbook-modal/addbook
 export class AppComponent {
   title = 'TroyLibrary';
 
-  constructor(private modalService: NgbModal, protected auth: AuthService, private router: Router) {}
+  constructor(private modalService: NgbModal,
+    protected auth: AuthService, 
+    private router: Router) {}
 
   //expose enum to template
   public role = Role;
@@ -28,7 +30,8 @@ export class AppComponent {
   logout(event: MouseEvent) {
     event?.preventDefault()
     this.auth.logout();
-    window.location.reload();
+    this.modalService.open(LoginModalComponent, { centered: true });
+    this.router.navigate(['/error']);
   }
 
   addBook(event: MouseEvent) {

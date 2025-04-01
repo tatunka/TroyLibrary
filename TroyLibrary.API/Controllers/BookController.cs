@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using TroyLibrary.Common.Models;
 using TroyLibrary.Common.Models.Book;

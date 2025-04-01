@@ -14,6 +14,7 @@ import { authInterceptor } from './shared/interceptors/auth-interceptor';
 import { AddbookModalComponent } from './shared/components/addbook-modal/addbook-modal.component';
 import { ReviewModalComponent } from './shared/components/review-modal/review-modal.component';
 import { environment } from '../environments/environment';
+import { ErrorPageComponent } from './error-page/error-page.component';
 
 export function tokenGetter() {
   return localStorage.getItem("token");
@@ -26,6 +27,7 @@ export function tokenGetter() {
     BasicToastComponent,
     AddbookModalComponent,
     ReviewModalComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

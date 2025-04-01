@@ -61,9 +61,12 @@
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">by {{ book.author}}</li>
                     <li class="list-group-item">
-                        <span *ngFor="let n of numSequence(book.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
-                        @if (book.rating % 1 !== 0) {
-                            <i class="bi bi-star-half"></i>
+                        @if (book.rating) {
+                            <span *ngFor="let n of numSequence(book.rating); let i = index;"><i class="bi bi-star-fill"></i></span>
+                            @if (book.rating % 1 !== 0) {
+                                <i class="bi bi-star-half"></i>
+                            }
+                            ({{book.rating}})
                         }
                         @if(book.rating === undefined || !book.rating) {
                             <span class="text-warning-emphasis">Not Yet Rated</span>

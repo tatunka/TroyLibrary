@@ -1,7 +1,7 @@
-import { Component, ElementRef,OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnChanges,OnDestroy,OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { BookService } from '../../shared/services/book.service';
 import { BookData, BookDetail, BookRequest, GetBookResponse } from '../models';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { LookupService } from '../../shared/services/lookup.service';
 import { LookupItem, LookupResponse } from '../../shared/models/lookup-models';
 import { BooleanResponse, CrudResponse, GetReviewsResponse, Lookups, Review } from '../../shared/models/models';
@@ -13,6 +13,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ReviewService } from '../../shared/services/review.service';
 import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ReviewModalComponent } from '../../shared/components/review-modal/review-modal.component';
+import { Subscription } from 'rxjs';
 
 const datePipe = new DatePipe('en-US');
 
@@ -22,7 +23,7 @@ const datePipe = new DatePipe('en-US');
   templateUrl: './book-detail.component.html',
   styleUrl: './book-detail.component.css'
 })
-export class BookDetailComponent implements OnInit {
+export class BookDetailComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private bookService: BookService, 
@@ -33,10 +34,16 @@ export class BookDetailComponent implements OnInit {
     protected auth: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    this.paramSubscription = this.route.params.subscribe({
+      next: (params: Params) => {
+        this.bookId = +params['bookId'];
+        this.reloadPage();
+      },
+    });
+  }
 
   @ViewChild('description') descriptionTextArea!: ElementRef<HTMLTextAreaElement>;
-
   
   form = new FormGroup({
     title: new FormControl('', Validators.required),
@@ -58,6 +65,8 @@ export class BookDetailComponent implements OnInit {
   pubDate: string | null = '';
   formControlClass: string = '';
 
+  private paramSubscription: Subscription;
+
   //expose enum to template
   public role = Role;
 
@@ -69,8 +78,19 @@ export class BookDetailComponent implements OnInit {
     else {
       this.formControlClass = 'form-control-plaintext';
     }
+    //this.reloadPage();
+    //get categories for dropdown
+    this.lookupService.lookup(Lookups.Category).subscribe({
+      next: (response: LookupResponse) => this.categories = response.items,
+      error: (error) => {
+        this.toast.showError('Unable to load categories');
+        console.log(error.message);
+      }
+    });
+  }
+
+  private reloadPage() {
     //get books
-    this.bookId = +(this.route.snapshot.paramMap.get('bookId') ?? 0);
     this.bookService.getBook(this.bookId).subscribe({
       next: (response: GetBookResponse) => {
         this.bookDetail = response.bookDetail;
@@ -98,17 +118,23 @@ export class BookDetailComponent implements OnInit {
       error: (error) => {
         this.toast.showError('Unable to retrieve book details');
         console.log(error.message);
+        this.router.navigate(['/error'])
       }
     });
+    //get reviews
     this.refreshReviews(this.bookId);
-    //get categories for dropdown
-    this.lookupService.lookup(Lookups.Category).subscribe({
-      next: (response: LookupResponse) => this.categories = response.items,
-      error: (error) => {
-        this.toast.showError('Unable to load categories');
-        console.log(error.message);
-      }
-    });
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes && changes['bookId']) {
+      this.reloadPage();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.paramSubscription) {
+      this.paramSubscription.unsubscribe();
+    }
   }
 
   updateBook(event: MouseEvent) {
@@ -123,6 +149,7 @@ export class BookDetailComponent implements OnInit {
         if (response.completedAt) {
           this.toast.showSuccess('Changes saved successfully!');
           this.pubDate = datePipe.transform(request.bookData.publicationDate, 'M/d/yyyy');
+          this.bookDetail.coverImage = request.bookData.coverImage;
           this.form.markAsPristine();
         }
         else {
@@ -139,7 +166,13 @@ export class BookDetailComponent implements OnInit {
   refreshReviews(bookId: number) {
   //get reviews
     this.reviewService.GetReviews(bookId).subscribe({
-      next: (response: GetReviewsResponse) => this.reviews = response.reviews,
+      next: (response: GetReviewsResponse) => {
+        this.reviews = response.reviews;
+        const sum = this.reviews
+          .map(r => r.rating)
+          .reduce((a, v) => a + v);
+          this.bookDetail.rating = this.reviews.length != 0 ? sum / this.reviews.length : 0;
+      },
       error: (error) => {
         this.toast.showError('Unable to retrieve reviews for this book');
         console.log(error.message);
