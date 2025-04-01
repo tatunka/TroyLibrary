@@ -47,6 +47,7 @@
 7. Sorting is not cascading.
 8. Librarians can edit and delete books from the book detail screen. They can also view due dates here.
 9. Librarians can add books by clicking the 'Add Book' button on the book list screen. This button only appears for librarians.
+10. A database diagram can be found in the root folder of this solution
 
 ************************************
 **		 Useful Commands		  **
